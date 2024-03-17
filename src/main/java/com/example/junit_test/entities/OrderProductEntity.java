@@ -13,15 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order_products")
-public class OrderProductEntity extends BaseEntity {
+@Table(name = "order_product")
+@IdClass(OrderProductEntity.class)
+public class OrderProductEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne
     private OrderEntity order;
 
+    @Id
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne
     private ProductEntity product;
+
+    private Integer quantity;
+    private Double tax;
 }
