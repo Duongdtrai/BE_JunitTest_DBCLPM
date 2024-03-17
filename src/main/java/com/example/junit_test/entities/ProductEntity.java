@@ -27,9 +27,6 @@ public class ProductEntity extends BaseEntity {
     private Integer quantity;
     private double price;
 
-    @ManyToOne
-    private SupplierEntity supplier;
-
     @ManyToMany(mappedBy = "products")
     private List<OrderEntity> orders;
 
