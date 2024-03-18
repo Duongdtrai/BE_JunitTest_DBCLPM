@@ -29,7 +29,7 @@ public class SupplierService {
 
     public ResponseEntity<SystemResponse<SupplierEntity>> getById(Integer id) {
         try {
-            SupplierEntity data = supplierRepository.findSupplierById(id);
+            SupplierEntity data = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (data == null) {
                 return Response.badRequest(404, "Category is not exist");
             }
@@ -47,6 +47,7 @@ public class SupplierService {
                 newSupplier.setName(supplier.getName());
                 newSupplier.setAddress(supplier.getAddress());
                 newSupplier.setPhoneNumber(supplier.getPhoneNumber());
+                newSupplier.setIsDeleted(false);
                 supplierRepository.save(newSupplier);
                 return Response.ok(true);
             }
@@ -59,7 +60,7 @@ public class SupplierService {
 
     public ResponseEntity<SystemResponse<Boolean>> update(Integer id, SupplierDto supplier) {
         try {
-            SupplierEntity existingSupplier = supplierRepository.findSupplierById(id);
+            SupplierEntity existingSupplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (supplier == null) {
                 return Response.badRequest(404, "Supplier is not exist");
             }
@@ -77,11 +78,12 @@ public class SupplierService {
 
     public ResponseEntity<SystemResponse<Boolean>> delete(Integer id) {
         try {
-            SupplierEntity supplier = supplierRepository.findSupplierById(id);
+            SupplierEntity supplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (supplier == null) {
                 return Response.badRequest(404, "Supplier is not exist");
             }
-            supplierRepository.delete(supplier);
+            supplier.setIsDeleted(true);
+            supplierRepository.save(supplier);
             return Response.ok(true);
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());

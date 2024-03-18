@@ -35,7 +35,7 @@ public class ProductService {
 
     public ResponseEntity<SystemResponse<ProductEntity>> getById(Integer id) {
         try {
-            ProductEntity data = productRepository.findProductEntitiesById(id);
+            ProductEntity data = productRepository.findProductEntitiesByIdAndIsDeletedFalse(id);
             if (data == null) {
                 return Response.badRequest(404, "Product is not exist");
             }
@@ -59,6 +59,7 @@ public class ProductService {
             productNew.setPrice(product.getPrice());
             productNew.setDescription(product.getDescription());
             productNew.setCategory(product.getCategory());
+            productNew.setIsDeleted(false);
             productRepository.save(productNew);
             return Response.ok(true);
         } catch (Exception e) {
@@ -68,7 +69,7 @@ public class ProductService {
 
     public ResponseEntity<SystemResponse<Boolean>> update(Integer id, ProductDto product) {
         try {
-            ProductEntity productExist = productRepository.findProductEntitiesById(id);
+            ProductEntity productExist = productRepository.findProductEntitiesByIdAndIsDeletedFalse(id);
             if (productExist == null) {
                 return Response.badRequest(404, "Category is not exist");
             }
@@ -82,6 +83,7 @@ public class ProductService {
             productExist.setPrice(product.getPrice());
             productExist.setDescription(product.getDescription());
             productExist.setCategory(product.getCategory());
+            productExist.setIsDeleted(false);
             productRepository.save(productExist);
             return Response.ok(true);
         } catch (Exception e) {
@@ -91,11 +93,12 @@ public class ProductService {
 
     public ResponseEntity<SystemResponse<Boolean>> delete(Integer id) {
         try {
-            ProductEntity productExist = productRepository.findProductEntitiesById(id);
+            ProductEntity productExist = productRepository.findProductEntitiesByIdAndIsDeletedFalse(id);
             if (productExist == null) {
                 return Response.badRequest(404, "Category is not exist");
             }
-            productRepository.delete(productExist);
+            productExist.setIsDeleted(true);
+            productRepository.save(productExist);
             return Response.ok(true);
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
