@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<SupplierEntity, Integer> {
-    SupplierEntity findSupplierById(Integer id);
+    SupplierEntity findSupplierByIdAndIsDeletedFalse(Integer id);
     SupplierEntity findByNameAndAddressAndPhoneNumber(String name, @NotBlank(message = "Address is required") String address, @NotBlank(message = "Phone number is required") String phoneNumber);
 }

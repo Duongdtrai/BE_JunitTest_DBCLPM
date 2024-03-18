@@ -4,6 +4,8 @@ package com.example.junit_test.modules.products.entities;
 import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.orders.entities.OrderEntity;
+import com.example.junit_test.modules.orders.entities.OrderProductEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +43,9 @@ public class ProductEntity extends BaseEntity {
     @ManyToOne
     private CategoryEntity category;
 
-    @ManyToMany(mappedBy = "products")
-    private List<OrderEntity> orders;
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<OrderProductEntity> orderProducts;
+
+    private Boolean isDeleted;
 }

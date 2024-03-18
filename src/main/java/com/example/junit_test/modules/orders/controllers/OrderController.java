@@ -1,52 +1,49 @@
 package com.example.junit_test.modules.orders.controllers;
 
 
+import com.example.junit_test.base.middleware.responses.Response;
+import com.example.junit_test.base.middleware.responses.SystemResponse;
+import com.example.junit_test.modules.orders.dto.OrderDto;
 import com.example.junit_test.modules.orders.entities.OrderEntity;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
+import com.example.junit_test.modules.orders.services.OrderService;
+import com.example.junit_test.modules.products.entities.ProductEntity;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<OrderEntity> createOrder(@RequestBody OrderEntity order) {
-        OrderEntity createdOrder = orderRepository.save(order);
-        return ResponseEntity.ok(createdOrder);
+    @GetMapping()
+    public ResponseEntity<SystemResponse<List<OrderEntity>>> list() {
+        return orderService.list();
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderEntity> getOrder(@PathVariable Integer orderId) {
-        Optional<OrderEntity> order = orderRepository.findById(orderId);
-        return order.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<SystemResponse<OrderEntity>> getById(@PathVariable Integer orderId) {
+        return orderService.getById(orderId);
+    }
+
+    @PostMapping
+    public ResponseEntity<SystemResponse<OrderEntity>> create(@Valid @RequestBody OrderDto order) {
+        return orderService.create(order);
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<OrderEntity> updateOrder(@PathVariable Integer orderId, @RequestBody OrderEntity updatedOrder) {
-        Optional<OrderEntity> existingOrder = orderRepository.findById(orderId);
-        if (existingOrder.isPresent()) {
-            OrderEntity order = existingOrder.get();
-            OrderEntity updatedOrderEntity = orderRepository.save(order);
-            return ResponseEntity.ok(updatedOrderEntity);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer orderId, @RequestBody OrderDto updatedOrder) {
+        return orderService.update(orderId, updatedOrder);
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer orderId) {
-        Optional<OrderEntity> order = orderRepository.findById(orderId);
-        if (order.isPresent()) {
-            orderRepository.delete(order.get());
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SystemResponse<Boolean>> delete(@PathVariable Integer orderId) {
+        return orderService.delete(orderId);
     }
 }

@@ -4,6 +4,7 @@ package com.example.junit_test.modules.orders.entities;
 import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.modules.products.entities.ProductEntity;
 import com.example.junit_test.modules.suppliers.entities.SupplierEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,11 +28,8 @@ public class OrderEntity extends BaseEntity {
     @JoinColumn(name = "supplier_id")
     private SupplierEntity supplier;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_product",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<ProductEntity> products;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // Thêm FetchType.EAGER ở đây
+    private List<OrderProductEntity> orderProducts;
+
+    private Boolean status;
 }
