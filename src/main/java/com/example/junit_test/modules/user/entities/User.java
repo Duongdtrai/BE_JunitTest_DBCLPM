@@ -42,7 +42,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "username")
     @NotBlank
-    @NotBlank
     private String username;
 
     @NotEmpty
@@ -59,10 +58,13 @@ public class User extends BaseEntity implements UserDetails {
 
     private Date expiredDate;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        System.out.println(List.of(new SimpleGrantedAuthority(role.name())));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
     }
+
     @Override
     @JsonIgnore
     public boolean isAccountNonExpired() {
@@ -85,5 +87,10 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
