@@ -1,5 +1,7 @@
 package com.example.junit_test;
 
+import com.example.junit_test.test.repository.AddressRepository;
+import com.example.junit_test.test.repository.PersonRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,10 @@ public class TestWebApp extends JunitTestApplication {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+
+    public TestWebApp(PersonRepository personRepository, AddressRepository addressRepository) {
+        super(personRepository, addressRepository);
+    }
 
     @Before
     public void setup() {

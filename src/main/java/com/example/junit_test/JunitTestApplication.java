@@ -15,33 +15,11 @@ import java.util.List;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class JunitTestApplication implements CommandLineRunner {
+public class JunitTestApplication {
     private final PersonRepository personRepository;
     private final AddressRepository addressRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(JunitTestApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        // Tạo đối tượng Address và liên kết với nhiều Person
-        Address address = Address.builder()
-                .city("New York")
-                .province("NY")
-                .build();
-
-        Person person1 = Person.builder()
-                .name("John Doe")
-                .address(address)
-                .build();
-
-        Person person2 = Person.builder()
-                .name("Jane Doe")
-                .address(address)
-                .build();
-        address.setPersons(List.of(person1, person2));
-        // Lưu vào db
-        addressRepository.save(address);
     }
 }
