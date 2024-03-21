@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 @AllArgsConstructor
-@SecurityRequirement(name = "Authorization")
-@EnableMethodSecurity
+//@SecurityRequirement(name = "Authorization")
+//@EnableMethodSecurity
 public class ProductController {
     private final ProductService productService;
 
