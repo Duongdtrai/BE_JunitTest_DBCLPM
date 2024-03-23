@@ -1,13 +1,23 @@
-FROM eclipse-temurin:17-jdk-focal
+FROM maven:3.9-amazoncorretto-21-al2023 as build
 
 WORKDIR /app
 
-COPY .mvn/ .mvn
+## TODO: Set user non-root
 
-COPY mvnw pom.xml ./
+COPY pom.xml .
 
-RUN chmod +x mvnw && ./mvnw dependency:go-offline
+COPY . .
 
-COPY src ./src
+RUN mvn package
 
-CMD ["./mvnw", "spring-boot:run"]
+FROM amazoncorretto:21-al2023
+
+WORKDIR /app
+
+## TODO: Set user non-root
+
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8081
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

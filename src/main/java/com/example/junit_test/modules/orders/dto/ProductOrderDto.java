@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
- public class ProductDto {
+ public class ProductOrderDto {
     private Integer id;
     private Integer quantity;
     private Double tax;

@@ -25,4 +25,36 @@ public class CategoryEntity extends BaseEntity {
     private String name;
 
     private Boolean isDeleted;
+
+
+    @PrePersist
+    protected void onCreate() {
+        // Thực hiện các thao tác trước khi đối tượng được lưu vào cơ sở dữ liệu
+        System.out.println("name: " + name);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        System.out.println("name 1: " + name);
+        // Thực hiện các thao tác trước khi đối tượng được cập nhật trong cơ sở dữ liệu
+    }
+
+    @PostPersist
+    protected void onPersist() {
+        System.out.println("name 2: " + name);
+        // Thực hiện các thao tác sau khi đối tượng được lưu vào cơ sở dữ liệu
+    }
+
+    @PostUpdate
+    protected void onPostUpdate() {
+        System.out.println("name 3: " + name);
+        // Thực hiện các thao tác sau khi đối tượng được cập nhật trong cơ sở dữ liệu
+    }
+
+
+    @PostRemove
+    protected void onRemove() {
+        System.out.println("name 4: " + name);
+        // Thực hiện các thao tác sau khi đối tượng bị xóa khỏi cơ sở dữ liệu
+    }
 }

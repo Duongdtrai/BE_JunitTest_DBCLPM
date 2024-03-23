@@ -64,12 +64,9 @@ public class AuthenticationService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        System.out.println(123);
-
         var user = repository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("Email is not exist")
         );
-        System.out.println(user.getEmail());
         var accessToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateToken(user);
 

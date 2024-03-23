@@ -1,9 +1,7 @@
 package com.example.junit_test.base.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,12 +19,14 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
     @CreatedDate
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(name = "createdAt", nullable = false, updatable = false)
     private Date createdAt;
 
     @LastModifiedDate
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(name = "updatedAt")
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
     @CreatedBy
     @Column(name = "createdBy")
@@ -36,9 +36,38 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "updatedBy")
     private User updatedBy;
 
-    @PrePersist
-    protected void prePersist() {
-        createdAt = new Date();
-    }
+//    @PrePersist
+//    protected void prePersist() {
+//        createdAt = new Date();
+//        updatedAt = new Date();
+//    }
+
+
+////    @PrePersist
+////    protected void onCreate() {
+////        // Thực hiện các thao tác trước khi đối tượng được lưu vào cơ sở dữ liệu
+////    }
+////
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updatedAt = new Date();
+//        // Thực hiện các thao tác trước khi đối tượng được cập nhật trong cơ sở dữ liệu
+//    }
+////
+////    @PostPersist
+////    protected void onPersist() {
+////        // Thực hiện các thao tác sau khi đối tượng được lưu vào cơ sở dữ liệu
+////    }
+////
+////    @PostUpdate
+////    protected void onPostUpdate() {
+////        // Thực hiện các thao tác sau khi đối tượng được cập nhật trong cơ sở dữ liệu
+////    }
+////
+////
+////    @PostRemove
+////    protected void onRemove() {
+////        // Thực hiện các thao tác sau khi đối tượng bị xóa khỏi cơ sở dữ liệu
+////    }
 }
 

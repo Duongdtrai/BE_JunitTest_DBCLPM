@@ -2,14 +2,17 @@ package com.example.junit_test.modules.orders.services;
 
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
+import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.dto.OrderDto;
-import com.example.junit_test.modules.orders.dto.ProductDto;
+import com.example.junit_test.modules.orders.dto.ProductOrderDto;
 import com.example.junit_test.modules.orders.entities.OrderEntity;
 import com.example.junit_test.modules.orders.entities.OrderProductEntity;
 import com.example.junit_test.modules.orders.repositories.OrderProductRepository;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
 import com.example.junit_test.modules.products.entities.ProductEntity;
 import com.example.junit_test.modules.products.repositories.ProductRepository;
+import com.example.junit_test.modules.suppliers.entities.SupplierEntity;
+import com.example.junit_test.modules.suppliers.repositories.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +36,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderProductRepository orderProductRepository;
+    private final SupplierRepository supplierRepository;
 
     public ResponseEntity<SystemResponse<List<OrderEntity>>> list() {
         try {
@@ -57,11 +64,15 @@ public class OrderService {
     public ResponseEntity<SystemResponse<OrderEntity>> create(OrderDto order) {
         try {
             OrderEntity newOrder = new OrderEntity();
-            newOrder.setSupplier(order.getSupplier());
+            SupplierEntity supplierExist = supplierRepository.findSupplierByIdAndIsDeletedFalse(order.getSupplier().getId());
+            if (supplierExist == null) {
+                throw new NotFoundException("Supplier is not exist");
+            }
+            newOrder.setSupplier(supplierExist);
             newOrder.setStatus(false);
             OrderEntity savedOrder = orderRepository.save(newOrder);
             List<OrderProductEntity> orderProducts = new ArrayList<>();
-            for (ProductDto productDto : order.getProducts()) {
+            for (ProductOrderDto productDto : order.getProducts()) {
                 OrderProductEntity orderProduct = new OrderProductEntity();
                 orderProduct.setOrder(savedOrder);
                 ProductEntity product = productRepository.findProductEntitiesByIdAndIsDeletedFalse(productDto.getId());
@@ -81,7 +92,7 @@ public class OrderService {
             return Response.ok(savedOrder);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Response.badRequest(500, e.getMessage());
+            return Response.badRequest(e.hashCode(), e.getMessage());
         }
     }
 
@@ -94,9 +105,9 @@ public class OrderService {
             }
             orderProductRepository.deleteByOrder_Id(existingOrder.getId());
             existingOrder.setStatus(order.getStatus() != null ? order.getStatus() : existingOrder.getStatus());
-            orderRepository.save(existingOrder);
+            existingOrder.setOrderProducts(null);
             List<OrderProductEntity> orderProducts = new ArrayList<>();
-            for (ProductDto productDto : order.getProducts()) {
+            for (ProductOrderDto productDto : order.getProducts()) {
                 OrderProductEntity orderProduct = new OrderProductEntity();
                 orderProduct.setOrder(existingOrder);
                 ProductEntity product = productRepository.findProductEntitiesByIdAndIsDeletedFalse(productDto.getId());
@@ -133,6 +144,15 @@ public class OrderService {
             return Response.ok(true);
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
+        }
+    }
+
+    public void importFile(MultipartFile file) {
+        try {
+            List<Object> tutorials = ExcelHelper.excelToTutorials(file.getInputStream());
+            System.out.println("tutorials: " + tutorials);
+        } catch (IOException e) {
+            throw new RuntimeException("fail to store excel data: " + e.getMessage());
         }
     }
 }
