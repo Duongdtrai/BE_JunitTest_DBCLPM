@@ -8,6 +8,7 @@ import com.example.junit_test.modules.suppliers.services.SupplierService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/suppliers")
 @AllArgsConstructor
+@Validated
 public class SupplierController {
     private final SupplierService supplierService;
 

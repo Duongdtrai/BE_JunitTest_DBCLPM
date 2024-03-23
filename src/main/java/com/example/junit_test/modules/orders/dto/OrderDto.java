@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto {
     private Boolean status = false;
-    private SupplierDto supplier;
-    private List<ProductDto> products;
+    private SupplierOrderDto supplier;
+    private List<ProductOrderDto> products;
 }
 
 

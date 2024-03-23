@@ -28,7 +28,7 @@ public class OrderEntity extends BaseEntity {
     @JoinColumn(name = "supplier_id")
     private SupplierEntity supplier;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // Thêm FetchType.EAGER ở đây
+    @OneToMany(mappedBy = "order") // Thêm FetchType.EAGER ở đây
     private List<OrderProductEntity> orderProducts;
 
     private Boolean status;
