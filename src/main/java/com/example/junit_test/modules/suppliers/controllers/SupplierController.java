@@ -5,6 +5,7 @@ import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.suppliers.dto.SupplierDto;
 import com.example.junit_test.modules.suppliers.entities.SupplierEntity;
 import com.example.junit_test.modules.suppliers.services.SupplierService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/suppliers")
 @AllArgsConstructor
 @Validated
+@Tag(name = "Supplier")
 public class SupplierController {
     private final SupplierService supplierService;
 

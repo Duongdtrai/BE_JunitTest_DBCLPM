@@ -9,6 +9,7 @@ import com.example.junit_test.modules.orders.entities.OrderEntity;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
 import com.example.junit_test.modules.orders.services.OrderService;
 import com.example.junit_test.modules.products.entities.ProductEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
+@Tag(name = "Orders")
 public class OrderController {
     private final OrderService orderService;
 

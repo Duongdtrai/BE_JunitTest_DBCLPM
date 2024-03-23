@@ -6,6 +6,7 @@ import com.example.junit_test.modules.products.dto.ProductDto;
 import com.example.junit_test.modules.products.entities.ProductEntity;
 import com.example.junit_test.modules.products.services.ProductService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 //@SecurityRequirement(name = "Authorization")
 //@EnableMethodSecurity
+@Tag(name = "Product")
 public class ProductController {
     private final ProductService productService;
 

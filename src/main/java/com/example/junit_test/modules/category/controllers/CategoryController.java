@@ -4,6 +4,7 @@ import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.dto.CategoryDto;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.category.services.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/category")
 @AllArgsConstructor
+@Tag(name = "Category")
 public class CategoryController {
 
     private final CategoryService categoryService;
