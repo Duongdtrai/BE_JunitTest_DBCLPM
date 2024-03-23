@@ -1,12 +1,17 @@
 package com.example.junit_test.modules.category.services;
 
 import com.example.junit_test.base.middleware.responses.Response;
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.dto.CategoryDto;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.category.repositories.CategoryRepository;
+import com.example.junit_test.modules.orders.entities.OrderEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +25,12 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
 
-    public ResponseEntity<SystemResponse<List<CategoryEntity>>> list() {
+    public ResponseEntity<SystemResponse<ResponsePage<CategoryEntity>>> list(int page, int size) {
         try {
-            List<CategoryEntity> data = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
-            return Response.ok(data);
+            Sort sort = Sort.by(Sort.Order.desc("updatedAt"));
+            Pageable paging = PageRequest.of(page, size, sort);
+            Page<CategoryEntity> data = categoryRepository.findAllByIsDeletedFalse(paging);
+            return Response.ok(new ResponsePage<CategoryEntity>(data));
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
         }

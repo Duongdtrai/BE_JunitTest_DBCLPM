@@ -1,5 +1,6 @@
 package com.example.junit_test.modules.products.controllers;
 
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.products.dto.ProductDto;
@@ -27,8 +28,9 @@ public class ProductController {
 
     @GetMapping()
     @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
-    public ResponseEntity<SystemResponse<List<ProductEntity>>> list() {
-        return productService.list();
+    public ResponseEntity<SystemResponse<ResponsePage<ProductEntity>>> list(@RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "10") int size) {
+        return productService.list(page, size);
     }
 
     @GetMapping("/{id}")

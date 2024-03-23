@@ -1,9 +1,11 @@
 package com.example.junit_test.modules.category.controllers;
 
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.dto.CategoryDto;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.category.services.CategoryService;
+import com.example.junit_test.modules.orders.entities.OrderEntity;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,8 +23,11 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public ResponseEntity<SystemResponse<List<CategoryEntity>>> list() {
-        return categoryService.list();
+    public ResponseEntity<SystemResponse<ResponsePage<CategoryEntity>>> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return categoryService.list(page, size);
     }
 
     @GetMapping("{id}")

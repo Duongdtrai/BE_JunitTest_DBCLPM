@@ -24,6 +24,11 @@ public class OrderEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String code;
+
+    @Column(name = "note", columnDefinition = "TEXT")
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private SupplierEntity supplier;

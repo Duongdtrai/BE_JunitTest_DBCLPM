@@ -1,6 +1,7 @@
 package com.example.junit_test.modules.orders.services;
 
 import com.example.junit_test.base.middleware.responses.Response;
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.dto.OrderDto;
@@ -16,6 +17,9 @@ import com.example.junit_test.modules.suppliers.repositories.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,10 +42,12 @@ public class OrderService {
     private final OrderProductRepository orderProductRepository;
     private final SupplierRepository supplierRepository;
 
-    public ResponseEntity<SystemResponse<List<OrderEntity>>> list() {
+    public ResponseEntity<SystemResponse<ResponsePage<OrderEntity>>> list(int page, int size) {
         try {
-            List<OrderEntity> order = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
-            return Response.ok(order);
+            Sort sort = Sort.by(Sort.Order.desc("updatedAt"));
+            Pageable paging = PageRequest.of(page, size, sort);
+            Page<OrderEntity> order = orderRepository.findAll(paging);
+            return Response.ok(new ResponsePage<OrderEntity>(order));
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
         }
@@ -68,6 +74,8 @@ public class OrderService {
             if (supplierExist == null) {
                 throw new NotFoundException("Supplier is not exist");
             }
+            newOrder.setCode(order.getCode());
+            newOrder.setNote(order.getNote());
             newOrder.setSupplier(supplierExist);
             newOrder.setStatus(false);
             OrderEntity savedOrder = orderRepository.save(newOrder);
@@ -105,6 +113,8 @@ public class OrderService {
             }
             orderProductRepository.deleteByOrder_Id(existingOrder.getId());
             existingOrder.setStatus(order.getStatus() != null ? order.getStatus() : existingOrder.getStatus());
+            existingOrder.setCode(order.getCode());
+            existingOrder.setNote(order.getNote());
             existingOrder.setOrderProducts(null);
             List<OrderProductEntity> orderProducts = new ArrayList<>();
             for (ProductOrderDto productDto : order.getProducts()) {

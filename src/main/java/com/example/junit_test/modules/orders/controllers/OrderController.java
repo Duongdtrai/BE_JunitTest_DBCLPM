@@ -2,13 +2,12 @@ package com.example.junit_test.modules.orders.controllers;
 
 
 import com.example.junit_test.base.middleware.responses.Response;
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.dto.OrderDto;
 import com.example.junit_test.modules.orders.entities.OrderEntity;
-import com.example.junit_test.modules.orders.repositories.OrderRepository;
 import com.example.junit_test.modules.orders.services.OrderService;
-import com.example.junit_test.modules.products.entities.ProductEntity;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -29,8 +27,11 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping()
-    public ResponseEntity<SystemResponse<List<OrderEntity>>> list() {
-        return orderService.list();
+    public ResponseEntity<SystemResponse<ResponsePage<OrderEntity>>> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return orderService.list(page, size);
     }
 
     @GetMapping("/{orderId}")

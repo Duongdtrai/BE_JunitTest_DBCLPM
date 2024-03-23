@@ -1,6 +1,7 @@
 package com.example.junit_test.modules.products.services;
 
 import com.example.junit_test.base.middleware.responses.Response;
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.category.repositories.CategoryRepository;
@@ -9,9 +10,13 @@ import com.example.junit_test.modules.products.entities.ProductEntity;
 import com.example.junit_test.modules.products.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -24,10 +29,12 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity<SystemResponse<List<ProductEntity>>> list() {
+    public ResponseEntity<SystemResponse<ResponsePage<ProductEntity>>> list(int page, int size) {
         try {
-            List<ProductEntity> data = productRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
-            return Response.ok(data);
+            Sort sort = Sort.by(Sort.Order.desc("updatedAt"));
+            Pageable paging = PageRequest.of(page, size, sort);
+            Page<ProductEntity> data = productRepository.findAllByIsDeletedFalse(paging);
+            return Response.ok(new ResponsePage<ProductEntity>(data));
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
         }

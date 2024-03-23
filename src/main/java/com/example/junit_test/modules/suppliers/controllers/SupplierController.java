@@ -1,5 +1,6 @@
 package com.example.junit_test.modules.suppliers.controllers;
 
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.suppliers.dto.SupplierDto;
@@ -23,8 +24,10 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping()
-    public ResponseEntity<SystemResponse<List<SupplierEntity>>> getAllSuppliers() {
-        return supplierService.list();
+    public ResponseEntity<SystemResponse<ResponsePage<SupplierEntity>>> getAllSuppliers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return supplierService.list(page, size);
     }
 
     @GetMapping("{id}")
