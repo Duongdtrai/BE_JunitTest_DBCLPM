@@ -36,7 +36,7 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<SystemResponse<Boolean>> createSupplier(@Valid @RequestBody CategoryDto category) {
+    public ResponseEntity<SystemResponse<CategoryEntity>> createSupplier(@Valid @RequestBody CategoryDto category) {
         return categoryService.create(category);
     }
 

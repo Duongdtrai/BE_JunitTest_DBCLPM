@@ -48,15 +48,15 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<SystemResponse<Boolean>> create(CategoryDto category) {
+    public ResponseEntity<SystemResponse<CategoryEntity>> create(CategoryDto category) {
         try {
             CategoryEntity categoryExist = categoryRepository.findByNameAndIsDeletedFalse(category.getName());
             if (categoryExist == null) {
                 CategoryEntity newCategory = new CategoryEntity();
                 newCategory.setName(category.getName());
                 newCategory.setIsDeleted(false);
-                categoryRepository.save(newCategory);
-                return Response.ok(true);
+                newCategory = categoryRepository.save(newCategory);
+                return Response.ok(newCategory);
             }
             return Response.badRequest(404, "Danh mục đã trùng name");
 
