@@ -30,5 +30,4 @@ public class OrderProductEntity {
     private ProductEntity product;
 
     private Integer quantity;
-    private Double tax;
 }

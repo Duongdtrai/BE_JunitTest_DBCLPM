@@ -58,14 +58,14 @@ public class ProductService {
 
             CategoryEntity categoryExist = categoryRepository.findByIdAndIsDeletedFalse(product.getCategory().getId());
             if (categoryExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             productNew.setImage(product.getImage());
             productNew.setName(product.getName());
             productNew.setQuantity(product.getQuantity());
             productNew.setPrice(product.getPrice());
             productNew.setDescription(product.getDescription());
-            productNew.setCategory(product.getCategory());
+            productNew.setCategory(categoryExist);
             productNew.setIsDeleted(false);
             productRepository.save(productNew);
             return Response.ok(true);
@@ -78,18 +78,18 @@ public class ProductService {
         try {
             ProductEntity productExist = productRepository.findProductEntitiesByIdAndIsDeletedFalse(id);
             if (productExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             CategoryEntity categoryExist = categoryRepository.findByIdAndIsDeletedFalse(product.getCategory().getId());
             if (categoryExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             productExist.setImage(product.getImage());
             productExist.setName(product.getName());
             productExist.setQuantity(product.getQuantity());
             productExist.setPrice(product.getPrice());
             productExist.setDescription(product.getDescription());
-            productExist.setCategory(product.getCategory());
+            productExist.setCategory(categoryExist);
             productExist.setIsDeleted(false);
             productRepository.save(productExist);
             return Response.ok(true);
@@ -102,7 +102,7 @@ public class ProductService {
         try {
             ProductEntity productExist = productRepository.findProductEntitiesByIdAndIsDeletedFalse(id);
             if (productExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             productExist.setIsDeleted(true);
             productRepository.save(productExist);

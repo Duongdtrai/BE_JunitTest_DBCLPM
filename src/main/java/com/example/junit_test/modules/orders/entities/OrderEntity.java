@@ -24,6 +24,8 @@ public class OrderEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Double tax;
+
     private String code;
 
     @Column(name = "note", columnDefinition = "TEXT")

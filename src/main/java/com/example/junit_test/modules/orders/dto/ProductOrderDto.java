@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
  public class ProductOrderDto {
     private Integer id;
     private Integer quantity;
-    private Double tax;
 }

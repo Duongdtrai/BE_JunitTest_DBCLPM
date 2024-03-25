@@ -40,7 +40,7 @@ public class CategoryService {
         try {
             CategoryEntity data = categoryRepository.findByIdAndIsDeletedFalse(id);
             if (data == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             return Response.ok(data);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class CategoryService {
                 categoryRepository.save(newCategory);
                 return Response.ok(true);
             }
-            return Response.badRequest(404, "Category is exist name");
+            return Response.badRequest(404, "Danh mục đã trùng name");
 
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
@@ -69,7 +69,7 @@ public class CategoryService {
         try {
             CategoryEntity categoryExist = categoryRepository.findByIdAndIsDeletedFalse(id);
             if (categoryExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             categoryExist.setName(category.getName());
             categoryRepository.save(categoryExist);
@@ -84,7 +84,7 @@ public class CategoryService {
         try {
             CategoryEntity categoryExist = categoryRepository.findByIdAndIsDeletedFalse(id);
             if (categoryExist == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             categoryExist.setIsDeleted(true);
             categoryRepository.save(categoryExist);

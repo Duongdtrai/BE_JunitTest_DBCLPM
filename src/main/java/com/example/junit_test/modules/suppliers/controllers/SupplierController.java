@@ -2,7 +2,6 @@ package com.example.junit_test.modules.suppliers.controllers;
 
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.category.entities.CategoryEntity;
 import com.example.junit_test.modules.suppliers.dto.SupplierDto;
 import com.example.junit_test.modules.suppliers.entities.SupplierEntity;
 import com.example.junit_test.modules.suppliers.services.SupplierService;
@@ -10,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class SupplierController {
     }
 
     @PostMapping()
-    public ResponseEntity<SystemResponse<Boolean>> createSupplier(@Valid @RequestBody SupplierDto supplier) {
+    public ResponseEntity<SystemResponse<Boolean>> createSupplier(@Valid @RequestBody SupplierDto supplier, Errors errors) {
         return supplierService.create(supplier);
     }
 

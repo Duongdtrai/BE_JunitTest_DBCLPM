@@ -38,7 +38,7 @@ public class SupplierService {
         try {
             SupplierEntity data = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (data == null) {
-                return Response.badRequest(404, "Category is not exist");
+                return Response.badRequest(404, "Danh mục không tồn tại");
             }
             return Response.ok(data);
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class SupplierService {
         try {
             SupplierEntity existingSupplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (supplier == null) {
-                return Response.badRequest(404, "Supplier is not exist");
+                return Response.badRequest(404, "Nhà cung cấp không tồn tại");
             }
             existingSupplier.setEmail(supplier.getEmail());
             existingSupplier.setNote(supplier.getNote());
@@ -87,9 +87,11 @@ public class SupplierService {
 
     public ResponseEntity<SystemResponse<Boolean>> delete(Integer id) {
         try {
+            System.out.println("Duong");
             SupplierEntity supplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
+            System.out.println("Duong123");
             if (supplier == null) {
-                return Response.badRequest(404, "Supplier is not exist");
+                return Response.badRequest(404, "Nhà cung cấp không tồn tại");
             }
             supplier.setIsDeleted(true);
             supplierRepository.save(supplier);
