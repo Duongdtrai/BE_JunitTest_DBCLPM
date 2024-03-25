@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +59,7 @@ public class OrderService {
         try {
             OrderEntity data = orderRepository.findOrderEntitiesById(orderId);
             if (data == null) {
-                return Response.badRequest(404, "Order is not exist");
+                return Response.badRequest(404, "Đơn đặt hàng không tồn tại");
             }
             return Response.ok(data);
         } catch (Exception e) {
@@ -69,15 +70,21 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<SystemResponse<OrderEntity>> create(OrderDto order) {
         try {
+            // check code order
+            OrderEntity orderExist = orderRepository.findOrderByCode(order.getCode());
+            if (orderExist != null) {
+                throw new BadRequestException("Mã order bị trùng");
+            }
             OrderEntity newOrder = new OrderEntity();
             SupplierEntity supplierExist = supplierRepository.findSupplierByIdAndIsDeletedFalse(order.getSupplier().getId());
             if (supplierExist == null) {
-                throw new NotFoundException("Supplier is not exist");
+                throw new NotFoundException("Nhà cung cấp không tồn tại");
             }
             newOrder.setCode(order.getCode());
             newOrder.setNote(order.getNote());
             newOrder.setSupplier(supplierExist);
             newOrder.setStatus(false);
+            newOrder.setTax(order.getTax());
             OrderEntity savedOrder = orderRepository.save(newOrder);
             List<OrderProductEntity> orderProducts = new ArrayList<>();
             for (ProductOrderDto productDto : order.getProducts()) {
@@ -85,36 +92,53 @@ public class OrderService {
                 orderProduct.setOrder(savedOrder);
                 ProductEntity product = productRepository.findProductEntitiesByIdAndIsDeletedFalse(productDto.getId());
                 if (product != null) {
-                    if (product.getQuantity() < productDto.getQuantity()) {
-                        throw new BadRequestException("Quantity is greater than quantity product");
-                    }
                     orderProduct.setProduct(product);
                     orderProduct.setQuantity(productDto.getQuantity());
-                    orderProduct.setTax(productDto.getTax());
                     orderProducts.add(orderProduct);
                 } else {
-                    throw new NotFoundException("Product is not exist");
+                    throw new NotFoundException("Sản phẩm không tồn tại");
                 }
             }
             orderProductRepository.saveAll(orderProducts);
             return Response.ok(savedOrder);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Response.badRequest(e.hashCode(), e.getMessage());
+            return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        }
+    }
+    public ResponseEntity<SystemResponse<Boolean>> updateStatus(Integer orderId) {
+        try {
+            OrderEntity existingOrder = orderRepository.findOrderEntitiesById(orderId);
+            if (existingOrder == null) {
+                throw new NotFoundException("Đơn đặt hàng không tồn tại");
+            }
+            existingOrder.setStatus(true);
+            orderRepository.save(existingOrder);
+            return Response.ok(200, "Cập nhật trạng thái thanh toán tiền thành công");
+        } catch (Exception e) {
+            return Response.badRequest(500, e.getMessage());
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<SystemResponse<Boolean>> update(Integer orderId, OrderDto order) {
         try {
+            OrderEntity orderExist = orderRepository.findOrderByCode(order.getCode());
+            if (orderExist != null && orderExist.getId() != orderId) {
+                throw new BadRequestException("Mã order bị trùng");
+            }
             OrderEntity existingOrder = orderRepository.findOrderEntitiesById(orderId);
             if (existingOrder == null) {
-                throw new NotFoundException("Order is not exist");
+                throw new NotFoundException("Đơn đặt hàng không tồn tại");
+            }
+            if (existingOrder.getStatus()) {
+                throw new BadRequestException("Đơn hàng đã được thanh toán, không được sửa đổi");
             }
             orderProductRepository.deleteByOrder_Id(existingOrder.getId());
-            existingOrder.setStatus(order.getStatus() != null ? order.getStatus() : existingOrder.getStatus());
+            existingOrder.setStatus(existingOrder.getStatus());
             existingOrder.setCode(order.getCode());
             existingOrder.setNote(order.getNote());
+            existingOrder.setTax(order.getTax());
             existingOrder.setOrderProducts(null);
             List<OrderProductEntity> orderProducts = new ArrayList<>();
             for (ProductOrderDto productDto : order.getProducts()) {
@@ -122,15 +146,11 @@ public class OrderService {
                 orderProduct.setOrder(existingOrder);
                 ProductEntity product = productRepository.findProductEntitiesByIdAndIsDeletedFalse(productDto.getId());
                 if (product != null) {
-                    if (product.getQuantity() < productDto.getQuantity()) {
-                        throw new BadRequestException("Quantity is greater than quantity product");
-                    }
                     orderProduct.setProduct(product);
                     orderProduct.setQuantity(productDto.getQuantity());
-                    orderProduct.setTax(productDto.getTax());
                     orderProducts.add(orderProduct);
                 } else {
-                    throw new NotFoundException("Product is not exist");
+                    throw new NotFoundException("Sản phẩm không tồn tại");
                 }
             }
             orderProductRepository.saveAll(orderProducts);
@@ -147,7 +167,7 @@ public class OrderService {
         try {
             OrderEntity existingOrder = orderRepository.findOrderEntitiesById(orderId);
             if (existingOrder == null) {
-                throw new NotFoundException("Order is not exist");
+                throw new NotFoundException("Đơn đặt hàng không tồn tại");
             }
             orderProductRepository.deleteByOrder_Id(orderId);
             orderRepository.deleteById(orderId);

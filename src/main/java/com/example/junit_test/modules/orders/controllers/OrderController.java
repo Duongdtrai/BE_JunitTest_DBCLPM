@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -44,9 +42,16 @@ public class OrderController {
         return orderService.create(order);
     }
 
+
+
     @PutMapping("/{orderId}")
     public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer orderId, @RequestBody OrderDto updatedOrder) {
         return orderService.update(orderId, updatedOrder);
+    }
+
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<SystemResponse<Boolean>> updateStatus(@PathVariable Integer orderId) {
+        return orderService.updateStatus(orderId);
     }
 
     @DeleteMapping("/{orderId}")

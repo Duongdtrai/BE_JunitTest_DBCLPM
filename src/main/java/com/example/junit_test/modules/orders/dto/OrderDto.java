@@ -12,6 +12,7 @@ import java.util.List;
 public class OrderDto {
     private String code;
     private String note;
+    private double tax;
     private Boolean status = false;
     private SupplierOrderDto supplier;
     private List<ProductOrderDto> products;

@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SupplierOrderDto {
-    @NotNull(message = "Id Supplier is required")
-    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "Id must be an integer")
+    @NotNull(message = "Id nhà cung cấp phải tồn tại")
+    @Digits(integer = Integer.MAX_VALUE, fraction = 0, message = "id là dạng số")
     @Schema(description = "ID of the supplier", example = "1")
     private Integer id;
 }

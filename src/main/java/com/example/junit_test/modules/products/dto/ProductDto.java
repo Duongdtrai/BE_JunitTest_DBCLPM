@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductDto {
     private String image;
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Tên là bắt buộc")
     private String name;
-    @NotNull(message = "Quantity is required")
+    @NotNull(message = "Số lượng là bắt buộc")
     private Integer quantity;
-    @NotNull(message = "Price is required")
+    @NotNull(message = "Bắt buộc phải có giá")
     private double price;
     private String description;
-    private CategoryEntity category;
+    private CategoryProductDto category;
 }
