@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/v1/category")
 @AllArgsConstructor
 @Tag(name = "Category")
+@Validated
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -36,12 +39,12 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<SystemResponse<CategoryEntity>> createSupplier(@Valid @RequestBody CategoryDto category) {
+    public ResponseEntity<SystemResponse<CategoryEntity>> createSupplier(@Valid @RequestBody CategoryDto category, Errors errors) {
         return categoryService.create(category);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>>  updateSupplier(@PathVariable Integer id, @Valid @RequestBody CategoryDto supplier) {
+    public ResponseEntity<SystemResponse<Boolean>>  updateSupplier(@PathVariable Integer id, @Valid @RequestBody CategoryDto supplier, Errors errors) {
         return categoryService.update(id, supplier);
     }
 

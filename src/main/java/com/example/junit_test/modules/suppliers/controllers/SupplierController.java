@@ -41,7 +41,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>> updateSupplier(@PathVariable Integer id, @Valid @RequestBody SupplierDto supplier) {
+    public ResponseEntity<SystemResponse<Boolean>> updateSupplier(@PathVariable Integer id, @Valid @RequestBody SupplierDto supplier, Errors errors) {
         return supplierService.update(id, supplier);
     }
 

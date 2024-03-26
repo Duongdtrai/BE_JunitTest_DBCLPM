@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,8 +27,8 @@ public class AuthenticationController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<SystemResponse<SignUpResponseDto>> register(
-            @Valid @RequestBody RegisterRequestDto request
-    ) {
+            @Valid @RequestBody RegisterRequestDto request, Errors errors
+            ) {
         return service.register(request);
     }
 
@@ -40,7 +41,7 @@ public class AuthenticationController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<SystemResponse<Boolean>> forgotPassword(
-            @Valid @RequestBody ForgetPasswordDto request
+            @Valid @RequestBody ForgetPasswordDto request, Errors errors
     ) {
         return service.forgotPassword(request);
     }
@@ -48,7 +49,7 @@ public class AuthenticationController {
 
     @PostMapping("/otp")
     public ResponseEntity<SystemResponse<Boolean>> otp(
-            @Valid @RequestBody OtpDto request
+            @Valid @RequestBody OtpDto request, Errors errors
     ) {
         return service.otp(request);
     }

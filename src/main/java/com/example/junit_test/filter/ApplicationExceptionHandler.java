@@ -20,6 +20,7 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<SystemResponse<Map<String, String>>> handleConstraintViolationException(ConstraintViolationException exception) {
         Map<String, String> errorMap = new HashMap<>();
+        System.out.println("Duogn213");
         exception.getConstraintViolations().forEach(violation -> {
             String field = violation.getPropertyPath().toString();
             String message = violation.getMessage();
