@@ -28,8 +28,8 @@ import java.util.List;
 @Table(name = "products")
 @JsonIgnoreProperties({"importOrderProducts"})
 public class Product extends BaseEntity {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Schema(hidden = true)
     private Integer id;
 
@@ -50,36 +50,34 @@ public class Product extends BaseEntity {
 
     private String description;
 
-    @Column(name="isDeleted", columnDefinition="BOOLEAN DEFAULT false")
+    @Column(name = "isDeleted", columnDefinition = "BOOLEAN DEFAULT false")
     @Schema(hidden = true)
     private Boolean isDeleted = false;
+
+    @NotNull
+    @Positive
+    @Column(name = "category_id", insertable = false, updatable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer categoryId;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     @Schema(hidden = true)
     private Category category;
 
-    @Transient
-    @NotNull
-    @Positive
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer categoryId;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"importOrder", "product"})
     private List<ImportOrderProduct> importOrderProducts;
 
-//    @PrePersist
-//    protected void onCreate() {
-//        System.out.println("DuongSave");
-//        this.category = new Category();
-//        this.category.setId(this.categoryId);
-//    }
-//
-//    @PreUpdate
-//    protected void onUpdate() {
-//        System.out.println("Duogn123");
-//        this.category = new Category();
-//        this.category.setId(this.categoryId);
-//    }
+    @PrePersist
+    protected void onCreate() {
+        this.category = new Category();
+        this.category.setId(this.categoryId);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.category = new Category();
+        this.category.setId(this.categoryId);
+    }
 }

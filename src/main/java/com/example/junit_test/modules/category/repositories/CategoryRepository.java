@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Page<Category> findAllByIsDeletedFalse(Pageable pageable);
-
     Category findByIdAndIsDeletedFalse(Integer id);
     Category findByNameAndIsDeletedFalse(String name);
 
