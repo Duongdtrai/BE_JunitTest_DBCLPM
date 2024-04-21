@@ -30,10 +30,6 @@ import java.util.List;
 })
 public class User extends BaseEntity implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @NotEmpty
     @NotBlank
     @Email

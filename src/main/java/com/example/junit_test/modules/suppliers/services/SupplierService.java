@@ -3,10 +3,8 @@ package com.example.junit_test.modules.suppliers.services;
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.category.entities.CategoryEntity;
-import com.example.junit_test.modules.products.entities.ProductEntity;
 import com.example.junit_test.modules.suppliers.dto.SupplierDto;
-import com.example.junit_test.modules.suppliers.entities.SupplierEntity;
+import com.example.junit_test.modules.suppliers.entities.Supplier;
 import com.example.junit_test.modules.suppliers.repositories.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,27 +14,27 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
 public class SupplierService {
     private final SupplierRepository supplierRepository;
 
-    public ResponseEntity<SystemResponse<ResponsePage<SupplierEntity>>> list(int page, int size) {
+    public ResponseEntity<SystemResponse<ResponsePage<Supplier>>> list(int page, int size) {
         try {
             Sort sort = Sort.by(Sort.Order.desc("updatedAt"));
             Pageable paging = PageRequest.of(page, size, sort);
-            Page<SupplierEntity> data = supplierRepository.findAllByIsDeletedFalse(paging);
-            return Response.ok(new ResponsePage<SupplierEntity>(data));
+            Page<Supplier> data = supplierRepository.findAllByIsDeletedFalse(paging);
+            return Response.ok(new ResponsePage<Supplier>(data));
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
         }
     }
 
-    public ResponseEntity<SystemResponse<SupplierEntity>> getById(Integer id) {
+    public ResponseEntity<SystemResponse<Supplier>> getById(Integer id) {
         try {
-            SupplierEntity data = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
+            Supplier data = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (data == null) {
                 return Response.badRequest(404, "Danh mục không tồn tại");
             }
@@ -46,39 +44,32 @@ public class SupplierService {
         }
     }
 
-    public ResponseEntity<SystemResponse<Boolean>> create(SupplierDto supplier) {
+    public ResponseEntity<SystemResponse<Boolean>> create(Supplier supplier) {
         try {
-            SupplierEntity supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
+            Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
             if (supplierExist == null) {
-                SupplierEntity newSupplier = new SupplierEntity();
-                newSupplier.setEmail(supplier.getEmail());
-                newSupplier.setNote(supplier.getNote());
-                newSupplier.setName(supplier.getName());
-                newSupplier.setAddress(supplier.getAddress());
-                newSupplier.setPhoneNumber(supplier.getPhoneNumber());
-                newSupplier.setIsDeleted(false);
-                supplierRepository.save(newSupplier);
+                supplierRepository.save(supplier);
                 return Response.ok(true);
             }
-            return Response.badRequest(404, "Category is exist name");
-
+            return Response.badRequest(404, "Supplier is exist name");
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
         }
     }
 
-    public ResponseEntity<SystemResponse<Boolean>> update(Integer id, SupplierDto supplier) {
+    public ResponseEntity<SystemResponse<Boolean>> update(Integer id, Supplier supplier) {
         try {
-            SupplierEntity existingSupplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
-            if (supplier == null) {
+            Supplier existingSupplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
+            if (existingSupplier == null) {
                 return Response.badRequest(404, "Nhà cung cấp không tồn tại");
             }
-            existingSupplier.setEmail(supplier.getEmail());
-            existingSupplier.setNote(supplier.getNote());
-            existingSupplier.setName(supplier.getName());
-            existingSupplier.setAddress(supplier.getAddress());
-            existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
-            supplierRepository.save(existingSupplier);
+
+            Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
+            if (supplierExist != null) {
+                return Response.badRequest(404, "Supplier is exist name");
+            }
+            supplier.setId(id);
+            supplierRepository.save(supplier);
             return Response.ok(true);
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
@@ -87,14 +78,25 @@ public class SupplierService {
 
     public ResponseEntity<SystemResponse<Boolean>> delete(Integer id) {
         try {
-            System.out.println("Duong");
-            SupplierEntity supplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
-            System.out.println("Duong123");
+            Supplier supplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
             if (supplier == null) {
                 return Response.badRequest(404, "Nhà cung cấp không tồn tại");
             }
             supplier.setIsDeleted(true);
             supplierRepository.save(supplier);
+            return Response.ok(true);
+        } catch (Exception e) {
+            return Response.badRequest(500, e.getMessage());
+        }
+    }
+
+    public ResponseEntity<SystemResponse<Boolean>> deleteAll(Integer[] ids) {
+        try {
+            int count = supplierRepository.countAllByIdIn(Arrays.asList(ids));
+            if (count != ids.length) {
+                return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+            }
+            supplierRepository.deleteAllById(Arrays.asList(ids));
             return Response.ok(true);
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());

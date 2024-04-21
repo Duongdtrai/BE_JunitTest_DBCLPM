@@ -1,14 +1,19 @@
 package com.example.junit_test.modules.orders.repositories;
 
-import com.example.junit_test.modules.orders.entities.OrderEntity;
+import com.example.junit_test.modules.orders.entities.ImportOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
-    OrderEntity findOrderEntitiesById(Integer id);
+import java.util.List;
 
-    OrderEntity findOrderByCode(String code);
+public interface OrderRepository extends JpaRepository<ImportOrder, Integer> {
+    ImportOrder findOrderEntitiesById(Integer id);
 
-    Page<OrderEntity> findAll(Pageable pageable);
+    ImportOrder findOrderByCode(String code);
+
+    Page<ImportOrder> findAll(Pageable pageable);
+
+    List<ImportOrder> findByCodeContaining(String key);
+    List<ImportOrder> findAllByOrderByUpdatedAtDesc();
 }

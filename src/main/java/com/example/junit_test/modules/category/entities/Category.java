@@ -1,6 +1,8 @@
 package com.example.junit_test.modules.category.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,17 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "categories")
-public class CategoryEntity extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+public class Category extends BaseEntity {
     @NotEmpty
     @NotBlank
     private String name;
 
-    private Boolean isDeleted;
-
+    @Schema(hidden = true)
+    private Boolean isDeleted = false;
 
     @PrePersist
     protected void onCreate() {
