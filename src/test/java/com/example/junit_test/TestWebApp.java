@@ -3,7 +3,7 @@ package com.example.junit_test;
 import com.example.junit_test.test.repository.AddressRepository;
 import com.example.junit_test.test.repository.PersonRepository;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +30,11 @@ public class TestWebApp extends JunitTestApplication {
     public TestWebApp(PersonRepository personRepository, AddressRepository addressRepository) {
         super(personRepository, addressRepository);
     }
+
+//    public TestWebApp() {
+//        super();
+//
+//    }
 
     @Before
     public void setup() {
