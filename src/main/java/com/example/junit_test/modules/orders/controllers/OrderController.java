@@ -6,8 +6,9 @@ import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.dto.OrderDto;
-import com.example.junit_test.modules.orders.entities.OrderEntity;
+import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.services.OrderService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping()
-    public ResponseEntity<SystemResponse<ResponsePage<OrderEntity>>> list(
+    public ResponseEntity<SystemResponse<ResponsePage<ImportOrder>>> list(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -36,21 +37,15 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<SystemResponse<OrderEntity>> getById(@PathVariable Integer orderId) {
+    public ResponseEntity<SystemResponse<ImportOrder>> getById(@PathVariable Integer orderId) {
         return orderService.getById(orderId);
     }
 
     @PostMapping
-    public ResponseEntity<SystemResponse<OrderEntity>> create(@Valid @RequestBody OrderDto order, Errors errors) {
-        return orderService.create(order);
+    public ResponseEntity<SystemResponse<ImportOrder>> create(@Valid @RequestBody ImportOrder importOrder, Errors errors) {
+        return orderService.create(importOrder);
     }
 
-
-
-    @PutMapping("/{orderId}")
-    public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer orderId, @RequestBody OrderDto updatedOrder) {
-        return orderService.update(orderId, updatedOrder);
-    }
 
     @PutMapping("/{orderId}/status")
     public ResponseEntity<SystemResponse<Boolean>> updateStatus(@PathVariable Integer orderId) {
@@ -63,6 +58,7 @@ public class OrderController {
     }
 
     @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Hidden
     public ResponseEntity<SystemResponse<String>> importFile(@RequestPart("file") MultipartFile file) {
         String message = "";
         if (ExcelHelper.hasExcelFormat(file)) {

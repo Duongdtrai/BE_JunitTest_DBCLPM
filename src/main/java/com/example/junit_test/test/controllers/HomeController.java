@@ -1,10 +1,13 @@
 package com.example.junit_test.test.controllers;
 
 import com.example.junit_test.test.model.Employee;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Hidden
 public class HomeController {
     @GetMapping()
     public @ResponseBody String greeting() {
