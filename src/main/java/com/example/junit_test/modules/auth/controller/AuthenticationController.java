@@ -3,6 +3,7 @@ package com.example.junit_test.modules.auth.controller;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.auth.dto.*;
 import com.example.junit_test.modules.auth.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Auth", description = "Authentication APIs")
+@Hidden
 public class AuthenticationController {
     @Autowired
     private final AuthenticationService service;
@@ -28,7 +30,7 @@ public class AuthenticationController {
     @PostMapping("/sign-up")
     public ResponseEntity<SystemResponse<SignUpResponseDto>> register(
             @Valid @RequestBody RegisterRequestDto request, Errors errors
-            ) {
+    ) {
         return service.register(request);
     }
 

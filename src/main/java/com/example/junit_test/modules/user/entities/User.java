@@ -3,7 +3,10 @@ package com.example.junit_test.modules.user.entities;
 import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,10 +32,6 @@ import java.util.List;
         @UniqueConstraint(columnNames = "email")
 })
 public class User extends BaseEntity implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotEmpty
     @NotBlank
@@ -62,7 +61,7 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         System.out.println(List.of(new SimpleGrantedAuthority(role.name())));
-        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.junit_test.modules.user.controller;
+package com.example.junit_test.modules.user.controllers;
 
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
@@ -6,22 +6,22 @@ import com.example.junit_test.modules.user.dto.ChangePasswordDto;
 import com.example.junit_test.modules.user.dto.UpdateDto;
 import com.example.junit_test.modules.user.entities.User;
 import com.example.junit_test.modules.user.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/user")
 @AllArgsConstructor
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Users", description = "Users APIs")
+@Hidden
 public class UserController {
     @Autowired
     private final UserService service;

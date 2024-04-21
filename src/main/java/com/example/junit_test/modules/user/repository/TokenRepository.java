@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TokenRepository extends JpaRepository<Token, Integer> {
     Integer countByToken(String token);
 
-    void deleteByUserIdAndToken(Long userId, String token);
+    void deleteByUserIdAndToken(Integer userId, String token);
 }
