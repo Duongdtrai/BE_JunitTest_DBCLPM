@@ -10,10 +10,10 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<ImportOrder, Integer> {
     ImportOrder findOrderEntitiesById(Integer id);
 
-    ImportOrder findOrderByCode(String code);
+    ImportOrder findImportOrderByIdAndCodeAndStatusIsTrue(Integer id, String code);
+    List<ImportOrder> findImportOrderByCode(String code);
 
     Page<ImportOrder> findAll(Pageable pageable);
 
-    List<ImportOrder> findByCodeContaining(String key);
-    List<ImportOrder> findAllByOrderByUpdatedAtDesc();
+    Page<ImportOrder> findAllByStatus(Pageable pageable, Boolean status);
 }

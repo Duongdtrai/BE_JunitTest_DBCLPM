@@ -2,7 +2,6 @@ package com.example.junit_test.modules.products.controllers;
 
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.products.dto.ProductDto;
 import com.example.junit_test.modules.products.entities.Product;
 import com.example.junit_test.modules.products.services.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;

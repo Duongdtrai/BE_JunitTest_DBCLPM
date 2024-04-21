@@ -30,7 +30,7 @@ public class Main {
 
 
     public static String calculateEvenPositiveSum(int[] array) {
-        if (array.length <= 0){
+        if (array.length <= 0) {
             return "Dãy không có số nào";
         }
         int sum = 0;

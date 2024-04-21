@@ -11,7 +11,6 @@ import com.example.junit_test.modules.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +24,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-//    @Value("${aws.s3.url}")
+    //    @Value("${aws.s3.url}")
 //    private String s3Url;
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
-//    private final S3Service s3Service;
+    //    private final S3Service s3Service;
     private final PasswordEncoder passwordEncoder;
 
     public ResponseEntity<SystemResponse<ResponsePage<User>>> list(int page, int size) {
@@ -87,6 +86,7 @@ public class UserService {
             return Response.badRequest(500, e.getMessage());
         }
     }
+
     public ResponseEntity<SystemResponse<Boolean>> logout(HttpServletRequest request, Authentication authentication) {
         try {
             User user = (User) authentication.getPrincipal();

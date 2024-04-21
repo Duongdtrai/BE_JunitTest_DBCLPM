@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAllByIsDeletedFalse(Pageable pageable);
+
     Product findProductEntitiesByIdAndIsDeletedFalse(Integer id);
 
     @Transactional

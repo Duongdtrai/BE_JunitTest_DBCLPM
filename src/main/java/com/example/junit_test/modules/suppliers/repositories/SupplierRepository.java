@@ -15,12 +15,16 @@ import java.util.List;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     Page<Supplier> findAllByIsDeletedFalse(Pageable pageable);
+
     Supplier findSupplierByIdAndIsDeletedFalse(Integer id);
+
     Supplier findByNameAndAddressAndPhoneNumber(String name, @NotBlank(message = "Address is required") String address, @NotBlank(message = "Phone number is required") String phoneNumber);
+
     @Transactional
     @Modifying
     @Query("UPDATE Supplier e SET e.isDeleted = true WHERE e.id IN :ids")
     void deleteAllById(List<Integer> ids);
+
     Integer countAllByIdIn(List<Integer> ids);
 
 }

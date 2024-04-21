@@ -6,9 +6,10 @@ import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.entities.ImportOrderProduct;
-import com.example.junit_test.modules.orders.repositories.OrderProductRepository;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
+import com.example.junit_test.modules.products.entities.Product;
 import com.example.junit_test.modules.products.repositories.ProductRepository;
+import com.example.junit_test.modules.suppliers.entities.Supplier;
 import com.example.junit_test.modules.suppliers.repositories.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,14 @@ import java.util.List;
 public class OrderService {
     @Autowired
     private final OrderRepository orderRepository;
-    private final OrderProductRepository orderProductRepository;
+    private final ProductRepository productRepository;
+    private final SupplierRepository supplierRepository;
 
-    public ResponseEntity<SystemResponse<ResponsePage<ImportOrder>>> list(int page, int size) {
+    public ResponseEntity<SystemResponse<ResponsePage<ImportOrder>>> list(int page, int size, Boolean status, String keySearch) {
         try {
             Sort sort = Sort.by(Sort.Order.desc("updatedAt"));
             Pageable paging = PageRequest.of(page, size, sort);
-            Page<ImportOrder> order = orderRepository.findAll(paging);
+            Page<ImportOrder> order = status == null ? orderRepository.findAll(paging) : orderRepository.findAllByStatus(paging, status);
             return Response.ok(new ResponsePage<ImportOrder>(order));
         } catch (Exception e) {
             return Response.badRequest(500, e.getMessage());
@@ -63,15 +65,64 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<SystemResponse<ImportOrder>> create(@RequestBody ImportOrder importOrder) {
         try {
-            for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
-                value.setImportOrder(importOrder);
+            List<ImportOrder> importOrderExist = orderRepository.findImportOrderByCode(importOrder.getCode());
+            if (importOrderExist.size() > 0) {
+                return Response.badRequest(404, "Code đã tồn tại trong hệ thống");
             }
+            Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
+            if (supplierExist == null) {
+                return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+            }
+            Double payment = (double) 0;
+            for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
+                payment += value.getImportPrice() * value.getQuantity();
+                value.setImportOrder(importOrder);
+                Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
+                if (productExist == null) {
+                    return Response.badRequest(404, "Sản phẩm không tồn tại");
+                }
+            }
+            payment += importOrder.getTax();
+            importOrder.setPayment(payment);
             return Response.ok(orderRepository.save(importOrder));
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<SystemResponse<ImportOrder>> update(Integer id, @RequestBody ImportOrder importOrder) {
+        try {
+            ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndCodeAndStatusIsTrue(id, importOrder.getCode());
+            if (importOrderExist == null) {
+                return Response.badRequest(404, "Đơn hàng không tồn tại hoặc không được cập nhật");
+            }
+            Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
+            if (supplierExist == null) {
+                return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+            }
+            Double payment = (double) 0;
+            for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
+                payment += value.getImportPrice() * value.getQuantity();
+                value.setImportOrder(importOrder);
+                Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
+                if (productExist == null) {
+                    return Response.badRequest(404, "Sản phẩm không tồn tại");
+                }
+            }
+            payment += importOrder.getTax();
+            importOrder.setStatus(importOrderExist.getStatus());
+            importOrder.setPayment(payment);
+            importOrder.setId(id);
+            return Response.ok(orderRepository.save(importOrder));
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        }
+    }
+
     public ResponseEntity<SystemResponse<Boolean>> updateStatus(Integer orderId) {
         try {
             ImportOrder existingOrder = orderRepository.findOrderEntitiesById(orderId);
@@ -94,7 +145,6 @@ public class OrderService {
             if (existingOrder == null) {
                 throw new NotFoundException("Đơn đặt hàng không tồn tại");
             }
-            orderProductRepository.deleteByOrder_Id(orderId);
             orderRepository.deleteById(orderId);
             return Response.ok(true);
         } catch (Exception e) {

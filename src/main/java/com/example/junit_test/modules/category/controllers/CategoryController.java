@@ -2,7 +2,6 @@ package com.example.junit_test.modules.category.controllers;
 
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.category.dto.CategoryDto;
 import com.example.junit_test.modules.category.entities.Category;
 import com.example.junit_test.modules.category.services.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<SystemResponse<Category>>  getSupplierById(@PathVariable Integer id) {
+    public ResponseEntity<SystemResponse<Category>> getSupplierById(@PathVariable Integer id) {
         return categoryService.getById(id);
     }
 
@@ -41,7 +40,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>>  updateSupplier(@PathVariable Integer id, @Valid @RequestBody Category supplier, Errors errors) {
+    public ResponseEntity<SystemResponse<Boolean>> updateSupplier(@PathVariable Integer id, @Valid @RequestBody Category supplier, Errors errors) {
         return categoryService.update(id, supplier);
     }
 

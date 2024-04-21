@@ -3,7 +3,9 @@ package com.example.junit_test.modules.suppliers.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +37,7 @@ public class Supplier extends BaseEntity {
     private String address;
 
     @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp="^\\+?[0-9]{10}$", message="Số điện thoại không hợp lệ")
+    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Số điện thoại không hợp lệ")
     private String phoneNumber;
 
     @Column(name = "note", columnDefinition = "TEXT", nullable = false)

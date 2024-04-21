@@ -4,7 +4,6 @@ package com.example.junit_test.modules.products.entities;
 import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.modules.category.entities.Category;
 import com.example.junit_test.modules.orders.entities.ImportOrderProduct;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

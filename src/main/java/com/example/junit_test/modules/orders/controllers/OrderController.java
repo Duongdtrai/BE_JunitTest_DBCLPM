@@ -5,10 +5,13 @@ import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.orders.ExcelHelper;
-import com.example.junit_test.modules.orders.dto.OrderDto;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.services.OrderService;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +32,29 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping()
+    @Operation(
+            summary = "",
+            parameters = {
+                    @Parameter(
+                            in = ParameterIn.QUERY,
+                            name = "status",
+                            schema = @Schema(
+                                    type = "boolean",
+                                    allowableValues = {"true", "false"},
+                                    defaultValue = "true"
+                            ),
+                            description = "Trạng thái đơn hàng"
+                    )
+            }
+    )
     public ResponseEntity<SystemResponse<ResponsePage<ImportOrder>>> list(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Boolean status,
+            @RequestParam(defaultValue = "") String keySearch
+
     ) {
-        return orderService.list(page, size);
+        return orderService.list(page, size, status, keySearch);
     }
 
     @GetMapping("/{orderId}")
@@ -46,8 +67,13 @@ public class OrderController {
         return orderService.create(importOrder);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SystemResponse<ImportOrder>> update(@PathVariable Integer id, @Valid @RequestBody ImportOrder importOrder, Errors errors) {
+        return orderService.update(id, importOrder);
+    }
 
-    @PutMapping("/{orderId}/status")
+
+    @PutMapping("/{orderId}/pay")
     public ResponseEntity<SystemResponse<Boolean>> updateStatus(@PathVariable Integer orderId) {
         return orderService.updateStatus(orderId);
     }

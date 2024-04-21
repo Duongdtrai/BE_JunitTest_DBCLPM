@@ -7,6 +7,8 @@ import com.example.junit_test.modules.category.entities.Category;
 import com.example.junit_test.modules.category.repositories.CategoryRepository;
 import com.example.junit_test.modules.products.entities.Product;
 import com.example.junit_test.modules.products.repositories.ProductRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +19,12 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
+    @Autowired
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-    }
 
     public ResponseEntity<SystemResponse<ResponsePage<Product>>> list(int page, int size) {
         try {
@@ -70,7 +70,6 @@ public class ProductService {
             if (productExist == null) {
                 return Response.badRequest(404, "Sản phẩm không tồn tại");
             }
-
             if (categoryExist == null) {
                 return Response.badRequest(404, "Danh mục không tồn tại");
             }
@@ -79,7 +78,6 @@ public class ProductService {
             productRepository.save(product);
             return Response.ok(true);
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.badRequest(500, e.getMessage());
         }
     }

@@ -4,7 +4,6 @@ import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.auth.dto.*;
 import com.example.junit_test.modules.auth.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class AuthenticationController {
     @PostMapping("/sign-up")
     public ResponseEntity<SystemResponse<SignUpResponseDto>> register(
             @Valid @RequestBody RegisterRequestDto request, Errors errors
-            ) {
+    ) {
         return service.register(request);
     }
 

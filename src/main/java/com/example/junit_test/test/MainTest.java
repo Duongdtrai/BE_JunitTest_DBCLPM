@@ -12,7 +12,8 @@ public class MainTest {
         assertEquals("Không có số chẵn dương nào trong dãy.", Main.calculateEvenPositiveSum(array));
     }
 
-    @Test //
+    @Test
+        //
     void testSumOfEvenPositiveNumbers() {
         int[] array = {1, 2, 3, 4, 5, 6};
         assertEquals("Tổng các số chẵn dương trong dãy là: 12", Main.calculateEvenPositiveSum(array));

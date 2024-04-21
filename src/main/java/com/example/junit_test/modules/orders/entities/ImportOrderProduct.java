@@ -1,15 +1,12 @@
 package com.example.junit_test.modules.orders.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
-import com.example.junit_test.modules.category.entities.Category;
 import com.example.junit_test.modules.products.entities.Product;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,13 +20,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "import_order_product")
 public class ImportOrderProduct extends BaseEntity {
-    @NotNull
-    @Positive
+    @NotNull(message = "Quantity is required")
+    @Positive(message = "Quantity must be greater than 0")
     private Integer quantity;
 
-    @NotNull
-    @PositiveOrZero
-    private Integer importPrice;
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
+    private Long importPrice;
 
     @NotNull
     @Positive
@@ -46,4 +43,16 @@ public class ImportOrderProduct extends BaseEntity {
     @JoinColumn(name = "import_order_id")
     @Schema(hidden = true)
     private ImportOrder importOrder;
+
+    @PrePersist
+    protected void onCreate() {
+        this.product = new Product();
+        this.product.setId(this.productId);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.product = new Product();
+        this.product.setId(this.productId);
+    }
 }
