@@ -6,24 +6,24 @@ import lombok.Data;
 @Data
 @Builder
 public class SystemResponse<T> {
-    private int status;
+  private int status;
 
-    private String message;
+  private String message;
 
-    private T data;
+  private T data;
 
-    public SystemResponse() {
-    }
+  public SystemResponse() {
+  }
 
 
-    public SystemResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
+  public SystemResponse(int status, String message) {
+    this.status = status;
+    this.message = message;
+  }
 
-    public SystemResponse(int status, String message, T data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
+  public SystemResponse(int status, String message, T data) {
+    this.status = status;
+    this.message = message;
+    this.data = data;
+  }
 }

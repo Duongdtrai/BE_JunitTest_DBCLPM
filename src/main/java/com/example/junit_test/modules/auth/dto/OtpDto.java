@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OtpDto {
-    @Email(message = "Email must be valid")
-    @NotBlank
-    @Size(max = 50)
-    @Schema(description = "This is email", example = "ptd@gmail.com")
-    private String email;
+  @Email(message = "Email must be valid")
+  @NotBlank
+  @Size(max = 50)
+  @Schema(description = "This is email", example = "ptd@gmail.com")
+  private String email;
 
-    @NotBlank
-    @Size(max = 6)
-    @Schema(description = "This is email", example = "123456")
-    private String otp;
+  @NotBlank
+  @Size(max = 6)
+  @Schema(description = "This is email", example = "123456")
+  private String otp;
 }

@@ -14,20 +14,20 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(hidden = true)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Schema(hidden = true)
+  private Integer id;
 
-    @CreatedDate
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    @Schema(hidden = true)
-    private Date createdAt;
+  @CreatedDate
+  @Column(name = "createdAt", nullable = false, updatable = false)
+  @Schema(hidden = true)
+  private Date createdAt;
 
-    @LastModifiedDate
-    @Column(name = "updatedAt")
-    @Schema(hidden = true)
-    private Date updatedAt;
+  @LastModifiedDate
+  @Column(name = "updatedAt")
+  @Schema(hidden = true)
+  private Date updatedAt;
 
 //    @PrePersist
 //    protected void prePersist() {

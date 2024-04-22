@@ -15,18 +15,18 @@ import java.util.Map;
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<SystemResponse<Map<String, String>>> handleConstraintViolationException(ConstraintViolationException exception) {
-        Map<String, String> errorMap = new HashMap<>();
-        System.out.println("Duogn213");
-        exception.getConstraintViolations().forEach(violation -> {
-            String field = violation.getPropertyPath().toString();
-            String message = violation.getMessage();
-            String[] fieldParts = field.split("\\.");
-            String fieldName = fieldParts[fieldParts.length - 1];
-            errorMap.put(fieldName, message);
-        });
-        return Response.badRequest(HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST", errorMap);
-    }
+  @ExceptionHandler(ConstraintViolationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<SystemResponse<Map<String, String>>> handleConstraintViolationException(ConstraintViolationException exception) {
+    Map<String, String> errorMap = new HashMap<>();
+    System.out.println("Duogn213");
+    exception.getConstraintViolations().forEach(violation -> {
+      String field = violation.getPropertyPath().toString();
+      String message = violation.getMessage();
+      String[] fieldParts = field.split("\\.");
+      String fieldName = fieldParts[fieldParts.length - 1];
+      errorMap.put(fieldName, message);
+    });
+    return Response.badRequest(HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST", errorMap);
+  }
 }

@@ -21,40 +21,40 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Product")
 @Validated
 public class ProductController {
-    private final ProductService productService;
+  private final ProductService productService;
 
-    @GetMapping()
-    @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
-    public ResponseEntity<SystemResponse<ResponsePage<Product>>> list(@RequestParam(defaultValue = "0") int page,
-                                                                      @RequestParam(defaultValue = "10") int size) {
-        return productService.list(page, size);
-    }
+  @GetMapping()
+  @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
+  public ResponseEntity<SystemResponse<ResponsePage<Product>>> list(@RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+    return productService.list(page, size);
+  }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
-    public ResponseEntity<SystemResponse<Product>> getById(@PathVariable Integer id) {
-        return productService.getById(id);
-    }
+  @GetMapping("/{id}")
+  @PreAuthorize("hasAnyRole('MANAGER', 'STAFF')")
+  public ResponseEntity<SystemResponse<Product>> getById(@PathVariable Integer id) {
+    return productService.getById(id);
+  }
 
-    @PostMapping()
+  @PostMapping()
 //    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<SystemResponse<Boolean>> create(@Valid @RequestBody Product product, Errors errors) {
-        return productService.create(product);
-    }
+  public ResponseEntity<SystemResponse<Boolean>> create(@Valid @RequestBody Product product, Errors errors) {
+    return productService.create(product);
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer id, @Valid @RequestBody Product product, Errors errors) {
-        return productService.update(id, product);
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer id, @Valid @RequestBody Product product, Errors errors) {
+    return productService.update(id, product);
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>> delete(@PathVariable Integer id) {
-        return productService.delete(id);
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<SystemResponse<Boolean>> delete(@PathVariable Integer id) {
+    return productService.delete(id);
+  }
 
 
-    @DeleteMapping("/all")
-    public ResponseEntity<SystemResponse<Boolean>> deleteProductsById(@RequestBody Integer[] arr) {
-        return productService.deleteAll(arr);
-    }
+  @DeleteMapping("/all")
+  public ResponseEntity<SystemResponse<Boolean>> deleteProductsById(@RequestBody Integer[] arr) {
+    return productService.deleteAll(arr);
+  }
 }

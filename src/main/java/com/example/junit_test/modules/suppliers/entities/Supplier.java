@@ -3,9 +3,7 @@ package com.example.junit_test.modules.suppliers.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,32 +18,37 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "suppliers")
 public class Supplier extends BaseEntity {
-    @Email
-    @NotBlank(message = "Email is required")
-    @NotNull
-    private String email;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Schema(hidden = true)
+  private Integer id;
 
-    @NotBlank(message = "Name is required")
-    private String name;
+  @Email
+  @NotBlank(message = "Email is required")
+  @NotNull
+  private String email;
 
-    @NotBlank
-    @NotEmpty
-    @NotNull
-    private String taxCode;
+  @NotBlank(message = "Name is required")
+  private String name;
 
-    @NotBlank(message = "Address is required")
-    private String address;
+  @NotBlank
+  @NotEmpty
+  @NotNull
+  private String taxCode;
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Số điện thoại không hợp lệ")
-    private String phoneNumber;
+  @NotBlank(message = "Address is required")
+  private String address;
 
-    @Column(name = "note", columnDefinition = "TEXT", nullable = false)
-    private String note;
+  @NotBlank(message = "Số điện thoại không được để trống")
+  @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Số điện thoại không hợp lệ")
+  private String phoneNumber;
 
-    @Column(name = "isDeleted", columnDefinition = "BOOLEAN DEFAULT false")
-    @Schema(hidden = true)
-    private Boolean isDeleted = false;
+  @Column(name = "note", columnDefinition = "TEXT", nullable = false)
+  private String note;
+
+  @Column(name = "isDeleted", columnDefinition = "BOOLEAN DEFAULT false")
+  @Schema(hidden = true)
+  private Boolean isDeleted = false;
 
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)

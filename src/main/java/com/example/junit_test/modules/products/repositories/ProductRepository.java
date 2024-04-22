@@ -13,14 +13,14 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Page<Product> findAllByIsDeletedFalse(Pageable pageable);
+  Page<Product> findAllByIsDeletedFalse(Pageable pageable);
 
-    Product findProductEntitiesByIdAndIsDeletedFalse(Integer id);
+  Product findProductEntitiesByIdAndIsDeletedFalse(Integer id);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE Product e SET e.isDeleted = true WHERE e.id IN :ids")
-    void deleteAllById(List<Integer> ids);
+  @Transactional
+  @Modifying
+  @Query("UPDATE Product e SET e.isDeleted = true WHERE e.id IN :ids")
+  void deleteAllById(List<Integer> ids);
 
-    Integer countAllByIdIn(List<Integer> ids);
+  Integer countAllByIdIn(List<Integer> ids);
 }

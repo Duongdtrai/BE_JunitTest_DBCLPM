@@ -8,9 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<ImportOrder, Integer> {
-    ImportOrder findOrderEntitiesById(Integer id);
-    ImportOrder findImportOrderByIdAndStatusIsFalse(Integer id);
-    List<ImportOrder> findImportOrderByCode(String code);
-    Page<ImportOrder> findAll(Pageable pageable);
-    Page<ImportOrder> findAllByStatus(Pageable pageable, Boolean status);
+  ImportOrder findOrderEntitiesById(Integer id);
+
+  ImportOrder findImportOrderByIdAndStatusIsFalse(Integer id);
+
+  List<ImportOrder> findImportOrderByCode(String code);
+
+  Page<ImportOrder> findAll(Pageable pageable);
+
+  Page<ImportOrder> findAllByStatus(Pageable pageable, Boolean status);
 }

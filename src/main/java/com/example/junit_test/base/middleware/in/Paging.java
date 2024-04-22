@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Paging<T> {
-    private int size;
+  private int size;
 
-    private int page;
+  private int page;
 
-    private int totalPage;
+  private int totalPage;
 
-    private int totalRecord;
+  private int totalRecord;
 
-    private T data;
+  private T data;
 }

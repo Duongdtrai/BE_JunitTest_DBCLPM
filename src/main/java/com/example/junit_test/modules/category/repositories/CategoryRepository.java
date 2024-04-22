@@ -11,16 +11,16 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    Page<Category> findAllByIsDeletedFalse(Pageable pageable);
+  Page<Category> findAllByIsDeletedFalse(Pageable pageable);
 
-    Category findByIdAndIsDeletedFalse(Integer id);
+  Category findByIdAndIsDeletedFalse(Integer id);
 
-    Category findByNameAndIsDeletedFalse(String name);
+  Category findByNameAndIsDeletedFalse(String name);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE Category e SET e.isDeleted = true WHERE e.id IN :ids")
-    void deleteAllById(List<Integer> ids);
+  @Transactional
+  @Modifying
+  @Query("UPDATE Category e SET e.isDeleted = true WHERE e.id IN :ids")
+  void deleteAllById(List<Integer> ids);
 
-    Integer countAllByIdIn(List<Integer> ids);
+  Integer countAllByIdIn(List<Integer> ids);
 }

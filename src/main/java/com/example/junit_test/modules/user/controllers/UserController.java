@@ -23,40 +23,40 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Users", description = "Users APIs")
 @Hidden
 public class UserController {
-    @Autowired
-    private final UserService service;
+  @Autowired
+  private final UserService service;
 
-    @GetMapping("/list")
-    public ResponseEntity<SystemResponse<ResponsePage<User>>> list(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        return service.list(page, size);
-    }
+  @GetMapping("/list")
+  public ResponseEntity<SystemResponse<ResponsePage<User>>> list(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size
+  ) {
+    return service.list(page, size);
+  }
 
-    @GetMapping("/detail")
-    public ResponseEntity<SystemResponse<User>> retrieveBy() {
-        return service.retrieveBy();
-    }
+  @GetMapping("/detail")
+  public ResponseEntity<SystemResponse<User>> retrieveBy() {
+    return service.retrieveBy();
+  }
 
-    @PatchMapping("/change-info")
-    public ResponseEntity<SystemResponse<User>> update(@RequestBody UpdateDto data) {
-        return service.update(data);
-    }
+  @PatchMapping("/change-info")
+  public ResponseEntity<SystemResponse<User>> update(@RequestBody UpdateDto data) {
+    return service.update(data);
+  }
 
-    @DeleteMapping("/delete-account")
-    public ResponseEntity<SystemResponse<Boolean>> delete() {
-        return service.delete();
-    }
+  @DeleteMapping("/delete-account")
+  public ResponseEntity<SystemResponse<Boolean>> delete() {
+    return service.delete();
+  }
 
 
-    @PostMapping("/change-password")
-    public ResponseEntity<SystemResponse<Boolean>> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
-        return service.changePassword(changePasswordDto);
-    }
+  @PostMapping("/change-password")
+  public ResponseEntity<SystemResponse<Boolean>> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+    return service.changePassword(changePasswordDto);
+  }
 
-    @PostMapping("/logout")
-    public ResponseEntity<SystemResponse<Boolean>> logout(HttpServletRequest request, Authentication authentication) {
-        return service.logout(request, authentication);
-    }
+  @PostMapping("/logout")
+  public ResponseEntity<SystemResponse<Boolean>> logout(HttpServletRequest request, Authentication authentication) {
+    return service.logout(request, authentication);
+  }
 }

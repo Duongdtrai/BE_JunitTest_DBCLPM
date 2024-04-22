@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailerDto {
-    private String to;
-    private String subject;
-    private String content;
+  private String to;
+  private String subject;
+  private String content;
 }

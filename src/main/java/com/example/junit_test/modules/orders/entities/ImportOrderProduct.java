@@ -20,39 +20,39 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "import_order_product")
 public class ImportOrderProduct extends BaseEntity {
-    @NotNull(message = "Quantity is required")
-    @Positive(message = "Quantity must be greater than 0")
-    private Integer quantity;
+  @NotNull(message = "Quantity is required")
+  @Positive(message = "Quantity must be greater than 0")
+  private Integer quantity;
 
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be greater than 0")
-    private Long importPrice;
+  @NotNull(message = "Price is required")
+  @Positive(message = "Price must be greater than 0")
+  private Long importPrice;
 
-    @NotNull
-    @Positive
-    @Column(name = "product_id", insertable = false, updatable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer productId;
+  @NotNull
+  @Positive
+  @Column(name = "product_id", insertable = false, updatable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Integer productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    @Schema(hidden = true)
-    private Product product;
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  @Schema(hidden = true)
+  private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "import_order_id")
-    @Schema(hidden = true)
-    private ImportOrder importOrder;
+  @ManyToOne
+  @JoinColumn(name = "import_order_id")
+  @Schema(hidden = true)
+  private ImportOrder importOrder;
 
-    @PrePersist
-    protected void onCreate() {
-        this.product = new Product();
-        this.product.setId(this.productId);
-    }
+  @PrePersist
+  protected void onCreate() {
+    this.product = new Product();
+    this.product.setId(this.productId);
+  }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.product = new Product();
-        this.product.setId(this.productId);
-    }
+  @PreUpdate
+  protected void onUpdate() {
+    this.product = new Product();
+    this.product.setId(this.productId);
+  }
 }

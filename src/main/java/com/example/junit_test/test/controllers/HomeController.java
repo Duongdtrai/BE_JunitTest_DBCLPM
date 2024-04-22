@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @Hidden
 public class HomeController {
-    @GetMapping()
-    public @ResponseBody String greeting() {
-        return "Hello, World";
-    }
+  @GetMapping()
+  public @ResponseBody String greeting() {
+    return "Hello, World";
+  }
 
 
-    @GetMapping("/employee")
-    public Employee firstPage() {
-        Employee emp = new Employee();
-        emp.setName("emp1");
-        emp.setDesignation("manager");
-        emp.setEmpId("1");
-        emp.setSalary(3000);
-        return emp;
-    }
+  @GetMapping("/employee")
+  public Employee firstPage() {
+    Employee emp = new Employee();
+    emp.setName("emp1");
+    emp.setDesignation("manager");
+    emp.setEmpId("1");
+    emp.setSalary(3000);
+    return emp;
+  }
 }

@@ -18,38 +18,38 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "Supplier")
 public class SupplierController {
-    private final SupplierService supplierService;
+  private final SupplierService supplierService;
 
-    @GetMapping()
-    public ResponseEntity<SystemResponse<ResponsePage<Supplier>>> getAllSuppliers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return supplierService.list(page, size);
-    }
+  @GetMapping()
+  public ResponseEntity<SystemResponse<ResponsePage<Supplier>>> getAllSuppliers(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size) {
+    return supplierService.list(page, size);
+  }
 
-    @GetMapping("{id}")
-    public ResponseEntity<SystemResponse<Supplier>> getSupplierById(@PathVariable Integer id) {
-        return supplierService.getById(id);
-    }
+  @GetMapping("{id}")
+  public ResponseEntity<SystemResponse<Supplier>> getSupplierById(@PathVariable Integer id) {
+    return supplierService.getById(id);
+  }
 
-    @PostMapping()
-    public ResponseEntity<SystemResponse<Boolean>> createSupplier(@Valid @RequestBody Supplier supplier, Errors errors) {
-        return supplierService.create(supplier);
-    }
+  @PostMapping()
+  public ResponseEntity<SystemResponse<Boolean>> createSupplier(@Valid @RequestBody Supplier supplier, Errors errors) {
+    return supplierService.create(supplier);
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>> updateSupplier(@PathVariable Integer id, @Valid @RequestBody Supplier supplier, Errors errors) {
-        return supplierService.update(id, supplier);
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<SystemResponse<Boolean>> updateSupplier(@PathVariable Integer id, @Valid @RequestBody Supplier supplier, Errors errors) {
+    return supplierService.update(id, supplier);
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SystemResponse<Boolean>> deleteSupplier(@PathVariable Integer id) {
-        return supplierService.delete(id);
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<SystemResponse<Boolean>> deleteSupplier(@PathVariable Integer id) {
+    return supplierService.delete(id);
+  }
 
 
-    @DeleteMapping("/all")
-    public ResponseEntity<SystemResponse<Boolean>> deleteSupplierByIds(@RequestBody Integer[] arr) {
-        return supplierService.deleteAll(arr);
-    }
+  @DeleteMapping("/all")
+  public ResponseEntity<SystemResponse<Boolean>> deleteSupplierByIds(@RequestBody Integer[] arr) {
+    return supplierService.deleteAll(arr);
+  }
 }

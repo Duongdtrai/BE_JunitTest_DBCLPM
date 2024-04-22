@@ -27,56 +27,56 @@ import java.util.List;
 @Table(name = "products")
 @JsonIgnoreProperties({"importOrderProducts"})
 public class Product extends BaseEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Schema(hidden = true)
-    private Integer id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
+  @Schema(hidden = true)
+  private Integer id;
 
-    private String image;
+  private String image;
 
-    @NotBlank(message = "Name is required")
-    @NotEmpty
-    @NotNull
-    private String name;
+  @NotBlank(message = "Name is required")
+  @NotEmpty
+  @NotNull
+  private String name;
 
-    @NotNull(message = "Quantity is required")
-    @Positive(message = "Quantity must be greater than 0")
-    private Integer quantity;
+  @NotNull(message = "Quantity is required")
+  @Positive(message = "Quantity must be greater than 0")
+  private Integer quantity;
 
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be greater than 0")
-    private double price;
+  @NotNull(message = "Price is required")
+  @Positive(message = "Price must be greater than 0")
+  private double price;
 
-    private String description;
+  private String description;
 
-    @Column(name = "isDeleted", columnDefinition = "BOOLEAN DEFAULT false")
-    @Schema(hidden = true)
-    private Boolean isDeleted = false;
+  @Column(name = "isDeleted", columnDefinition = "BOOLEAN DEFAULT false")
+  @Schema(hidden = true)
+  private Boolean isDeleted = false;
 
-    @NotNull
-    @Positive
-    @Column(name = "category_id", insertable = false, updatable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer categoryId;
+  @NotNull
+  @Positive
+  @Column(name = "category_id", insertable = false, updatable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Integer categoryId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    @Schema(hidden = true)
-    private Category category;
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  @Schema(hidden = true)
+  private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"importOrder", "product"})
-    private List<ImportOrderProduct> importOrderProducts;
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @JsonIgnoreProperties({"importOrder", "product"})
+  private List<ImportOrderProduct> importOrderProducts;
 
-    @PrePersist
-    protected void onCreate() {
-        this.category = new Category();
-        this.category.setId(this.categoryId);
-    }
+  @PrePersist
+  protected void onCreate() {
+    this.category = new Category();
+    this.category.setId(this.categoryId);
+  }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.category = new Category();
-        this.category.setId(this.categoryId);
-    }
+  @PreUpdate
+  protected void onUpdate() {
+    this.category = new Category();
+    this.category.setId(this.categoryId);
+  }
 }

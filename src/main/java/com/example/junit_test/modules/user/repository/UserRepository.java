@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query(value = "SELECT * FROM users WHERE email = :email AND status = true", nativeQuery = true)
-    Optional<User> findByEmail(String email);
+  @Query(value = "SELECT * FROM users WHERE email = :email AND status = true", nativeQuery = true)
+  Optional<User> findByEmail(String email);
 
-    User findByEmailAndStatus(String email, Boolean status);
+  User findByEmailAndStatus(String email, Boolean status);
 }

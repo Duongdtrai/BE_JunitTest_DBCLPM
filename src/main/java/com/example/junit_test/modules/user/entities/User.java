@@ -33,63 +33,63 @@ import java.util.List;
 })
 public class User extends BaseEntity implements UserDetails {
 
-    @NotEmpty
-    @NotBlank
-    @Email
-    @Column(name = "email")
-    private String email;
+  @NotEmpty
+  @NotBlank
+  @Email
+  @Column(name = "email")
+  private String email;
 
-    @Column(name = "username")
-    @NotBlank
-    private String username;
+  @Column(name = "username")
+  @NotBlank
+  private String username;
 
-    @NotEmpty
-    @NotBlank
-    private String password;
+  @NotEmpty
+  @NotBlank
+  private String password;
 
-    private Role role;
+  private Role role;
 
-    private String avatar;
+  private String avatar;
 
-    private Boolean status;
+  private Boolean status;
 
-    private String otp;
+  private String otp;
 
-    private Date expiredDate;
+  private Date expiredDate;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println(List.of(new SimpleGrantedAuthority(role.name())));
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    System.out.println(List.of(new SimpleGrantedAuthority(role.name())));
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+  }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  @JsonIgnore
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  @JsonIgnore
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    @JsonIgnore
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  @JsonIgnore
+  public boolean isEnabled() {
+    return true;
+  }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+  @Override
+  public String getUsername() {
+    return email;
+  }
 }
