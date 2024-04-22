@@ -63,17 +63,20 @@ public class OrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<SystemResponse<ImportOrder>> create(@RequestBody ImportOrder importOrder) {
+    public ResponseEntity<SystemResponse<Boolean>> create(@RequestBody ImportOrder importOrder) {
         try {
             List<ImportOrder> importOrderExist = orderRepository.findImportOrderByCode(importOrder.getCode());
-            if (importOrderExist.size() > 0) {
-                return Response.badRequest(404, "Code đã tồn tại trong hệ thống");
+            if (!importOrderExist.isEmpty()) {
+                return Response.badRequest(400, "Code đã tồn tại trong hệ thống");
             }
             Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
             if (supplierExist == null) {
                 return Response.badRequest(404, "Nhà cung cấp không tồn tại");
             }
             Double payment = (double) 0;
+            if (importOrder.getImportOrderProducts().isEmpty()) {
+                return Response.badRequest(400, "Đơn hàng cần phải có sản phẩm");
+            }
             for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
                 payment += value.getImportPrice() * value.getQuantity();
                 value.setImportOrder(importOrder);
@@ -81,10 +84,14 @@ public class OrderService {
                 if (productExist == null) {
                     return Response.badRequest(404, "Sản phẩm không tồn tại");
                 }
+                if (productExist.getPrice() < value.getImportPrice()){
+                    return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");
+                }
             }
             payment += importOrder.getTax();
             importOrder.setPayment(payment);
-            return Response.ok(orderRepository.save(importOrder));
+            orderRepository.save(importOrder);
+            return Response.ok(true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
@@ -93,11 +100,17 @@ public class OrderService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<SystemResponse<ImportOrder>> update(Integer id, @RequestBody ImportOrder importOrder) {
+    public ResponseEntity<SystemResponse<Boolean>> update(Integer id, @RequestBody ImportOrder importOrder) {
         try {
-            ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndCodeAndStatusIsTrue(id, importOrder.getCode());
+            ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndStatusIsFalse(id);
             if (importOrderExist == null) {
-                return Response.badRequest(404, "Đơn hàng không tồn tại hoặc không được cập nhật");
+                return Response.badRequest(404, "Đơn hàng không được sửa đổi");
+            }
+            if (!importOrderExist.getCode().equalsIgnoreCase(importOrder.getCode())) {
+                return Response.badRequest(400, "Đơn hàng không được thay đổi mã sản phẩm");
+            }
+            if (importOrder.getImportOrderProducts().isEmpty()) {
+                return Response.badRequest(400, "Đơn hàng cần phải có sản phẩm");
             }
             Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
             if (supplierExist == null) {
@@ -111,12 +124,15 @@ public class OrderService {
                 if (productExist == null) {
                     return Response.badRequest(404, "Sản phẩm không tồn tại");
                 }
+                if (productExist.getPrice() < value.getImportPrice()){
+                    return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");
+                }
             }
             payment += importOrder.getTax();
-            importOrder.setStatus(importOrderExist.getStatus());
             importOrder.setPayment(payment);
             importOrder.setId(id);
-            return Response.ok(orderRepository.save(importOrder));
+            orderRepository.save(importOrder);
+            return Response.ok(true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());

@@ -63,12 +63,12 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<SystemResponse<ImportOrder>> create(@Valid @RequestBody ImportOrder importOrder, Errors errors) {
+    public ResponseEntity<SystemResponse<Boolean>> create(@Valid @RequestBody ImportOrder importOrder, Errors errors) {
         return orderService.create(importOrder);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SystemResponse<ImportOrder>> update(@PathVariable Integer id, @Valid @RequestBody ImportOrder importOrder, Errors errors) {
+    public ResponseEntity<SystemResponse<Boolean>> update(@PathVariable Integer id, @Valid @RequestBody ImportOrder importOrder, Errors errors) {
         return orderService.update(id, importOrder);
     }
 

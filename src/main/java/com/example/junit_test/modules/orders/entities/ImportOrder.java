@@ -53,7 +53,7 @@ public class ImportOrder extends BaseEntity {
     @Schema(hidden = true)
     private Supplier supplier;
 
-    @OneToMany(mappedBy = "importOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "importOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"importOrder"})
     private List<ImportOrderProduct> importOrderProducts;
 
