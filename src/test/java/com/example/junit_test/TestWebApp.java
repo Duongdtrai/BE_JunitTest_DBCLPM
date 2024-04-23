@@ -1,7 +1,7 @@
 package com.example.junit_test;
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +23,16 @@ public class TestWebApp extends JunitTestApplication {
   private MockMvc mockMvc;
 
 
-  @Before
-  public void setup() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-  }
+//    public TestWebApp() {
+//        super();
+//
+//    }
+
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
 
   @Test
   public void testEmployee() throws Exception {

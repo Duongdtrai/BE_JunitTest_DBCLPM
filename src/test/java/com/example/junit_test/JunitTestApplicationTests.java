@@ -15,9 +15,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 class JunitTestApplicationTests {
 
+
   @Test
   void contextLoads() {
   }
+
 
   @BeforeAll
   public static void initData(
