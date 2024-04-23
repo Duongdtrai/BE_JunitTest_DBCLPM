@@ -18,60 +18,58 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "6cd33905c0c797935a8a524d85bb93966ed9e36f626176e7e8cdfc435237de63";
+  private static final String SECRET_KEY = "6cd33905c0c797935a8a524d85bb93966ed9e36f626176e7e8cdfc435237de63";
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+  public String extractUsername(String token) {
+    return extractClaim(token, Claims::getSubject);
+  }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
+  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    final Claims claims = extractAllClaims(token);
+    return claimsResolver.apply(claims);
+  }
 
-    public String generateToken(User userDetails) {
-        // vì User implements UserDetail khi khai bao UserDetails userDetails thi tu hieu la = new User()
-        return generateToken(new HashMap<>(), userDetails);
-    }
+  public String generateToken(User userDetails) {
+    // vì User implements UserDetail khi khai bao UserDetails userDetails thi tu hieu la = new User()
+    return generateToken(new HashMap<>(), userDetails);
+  }
 
-    public String generateToken(Map<String, Object> extraClaims, User userDetails) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+  public String generateToken(Map<String, Object> extraClaims, User userDetails) {
+    return Jwts
+            .builder()
+            .setClaims(extraClaims)
+            .setSubject(userDetails.getEmail())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
+  }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        System.out.println("username: " + username);
-        System.out.println("userDetails: " + userDetails.getUsername());
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
+  public boolean isTokenValid(String token, UserDetails userDetails) {
+    final String username = extractUsername(token);
+    return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+  }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+  private boolean isTokenExpired(String token) {
+    return extractExpiration(token).before(new Date());
+  }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
+  private Date extractExpiration(String token) {
+    return extractClaim(token, Claims::getExpiration);
+  }
 
-    // giai ma token
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
+  // giai ma token
+  private Claims extractAllClaims(String token) {
+    return Jwts
+            .parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+  }
 
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
+  private Key getSigningKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
 }

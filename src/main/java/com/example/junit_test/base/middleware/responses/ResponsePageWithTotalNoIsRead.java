@@ -10,19 +10,19 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponsePageWithTotalNoIsRead<T> {
-    private T data;
-    private CustomMetadata metadata;
+  private T data;
+  private CustomMetadata metadata;
 
-    public ResponsePageWithTotalNoIsRead(Page<T> page, int totalNoIsRead) {
-        this.data = (T) page.getContent();
-        this.metadata = new CustomMetadata(
-                (int) page.getTotalElements(),
-                page.getTotalPages(),
-                page.getSize(),
-                page.getNumber(),
-                totalNoIsRead
-        );
-    }
+  public ResponsePageWithTotalNoIsRead(Page<T> page, int totalNoIsRead) {
+    this.data = (T) page.getContent();
+    this.metadata = new CustomMetadata(
+            (int) page.getTotalElements(),
+            page.getTotalPages(),
+            page.getSize(),
+            page.getNumber(),
+            totalNoIsRead
+    );
+  }
 }
 
 
@@ -30,10 +30,10 @@ public class ResponsePageWithTotalNoIsRead<T> {
 @NoArgsConstructor
 @AllArgsConstructor
 class CustomMetadata extends MetaData {
-    private int totalNoIsRead;
+  private int totalNoIsRead;
 
-    public CustomMetadata(int totalElements, int totalPages, int size, int page, int totalNoIsRead) {
-        super(totalElements, totalPages, size, page);
-        this.totalNoIsRead = totalNoIsRead;
-    }
+  public CustomMetadata(int totalElements, int totalPages, int size, int page, int totalNoIsRead) {
+    super(totalElements, totalPages, size, page);
+    this.totalNoIsRead = totalNoIsRead;
+  }
 }

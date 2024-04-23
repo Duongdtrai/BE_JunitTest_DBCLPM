@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 })
 @Schema(description = "User Model Information")
 public class Token {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Tutorial Id", example = "1")
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Tutorial Id", example = "1")
+  private Integer id;
 
-    private String token;
+  private String token;
 
-    private Long userId;
+  private Integer userId;
 }

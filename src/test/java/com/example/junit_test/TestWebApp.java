@@ -1,7 +1,5 @@
 package com.example.junit_test;
 
-import com.example.junit_test.test.repository.AddressRepository;
-import com.example.junit_test.test.repository.PersonRepository;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,24 +10,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TestWebApp extends JunitTestApplication {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+  @Autowired
+  private WebApplicationContext webApplicationContext;
 
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-    public TestWebApp(PersonRepository personRepository, AddressRepository addressRepository) {
-        super(personRepository, addressRepository);
-    }
 
 //    public TestWebApp() {
 //        super();
@@ -41,12 +33,13 @@ public class TestWebApp extends JunitTestApplication {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
-    public void testEmployee() throws Exception {
-        mockMvc.perform(get("/user/employee")).andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.name").value("emp1")).andExpect(jsonPath("$.designation").value("manager"))
-                .andExpect(jsonPath("$.empId").value("1")).andExpect(jsonPath("$.salary").value(3000));
 
-    }
+  @Test
+  public void testEmployee() throws Exception {
+    mockMvc.perform(get("/user/employee")).andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andExpect(jsonPath("$.name").value("emp1")).andExpect(jsonPath("$.designation").value("manager"))
+            .andExpect(jsonPath("$.empId").value("1")).andExpect(jsonPath("$.salary").value(3000));
+
+  }
 }

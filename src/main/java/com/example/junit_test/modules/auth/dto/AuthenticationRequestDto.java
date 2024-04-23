@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationRequestDto {
-    @Email(message = "Email must be valid")
-    @NotBlank
-    @Size(max = 50)
-    @Schema(description = "This is email", example = "ptd@gmail.com")
-    private String email;
+  @Email(message = "Email must be valid")
+  @NotBlank
+  @Size(max = 50)
+  @Schema(description = "This is email", example = "ptd@gmail.com")
+  private String email;
 
-    @NotBlank
-    @Schema(description = "This is password", example = "123123")
-    private String password;
+  @NotBlank
+  @Schema(description = "This is password", example = "123123")
+  private String password;
 
 }

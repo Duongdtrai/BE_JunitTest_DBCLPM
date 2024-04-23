@@ -9,12 +9,12 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponsePage<T> {
-    private T data;
-    private MetaData metadata;
+  private T data;
+  private MetaData metadata;
 
-    public ResponsePage(Page<T> page) {
-        this.data = (T) page.getContent();
-        this.metadata = new MetaData((int) page.getTotalElements(), page.getTotalPages(), page.getSize(), page.getNumber());
-    }
+  public ResponsePage(Page<T> page) {
+    this.data = (T) page.getContent();
+    this.metadata = new MetaData((int) page.getTotalElements(), page.getTotalPages(), page.getSize(), page.getNumber());
+  }
 }
 

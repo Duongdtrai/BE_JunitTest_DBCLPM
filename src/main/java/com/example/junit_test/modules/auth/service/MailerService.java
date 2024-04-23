@@ -11,17 +11,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MailerService {
-    @Autowired
-    private JavaMailSender emailSender;
-    @Value("${spring.mail.username}")
-    private String emailFrom;
+  @Autowired
+  private JavaMailSender emailSender;
+  @Value("${spring.mail.username}")
+  private String emailFrom;
 
-    public void sendMail(MailerDto mailer) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailFrom);
-        message.setTo(mailer.getTo());
-        message.setSubject(mailer.getSubject());
-        message.setText(mailer.getContent());
-        emailSender.send(message);
-    }
+  public void sendMail(MailerDto mailer) {
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setFrom(emailFrom);
+    message.setTo(mailer.getTo());
+    message.setSubject(mailer.getSubject());
+    message.setText(mailer.getContent());
+    emailSender.send(message);
+  }
 }
