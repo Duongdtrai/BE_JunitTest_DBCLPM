@@ -1,52 +1,66 @@
 package com.example.junit_test.modules.products.repositories;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import com.example.junit_test.base.middleware.responses.SystemResponse;
+import com.example.junit_test.modules.products.entities.Product;
+import com.example.junit_test.modules.products.services.ProductService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import com.example.junit_test.modules.products.entities.ProductEntity;
-import com.example.junit_test.modules.products.repositories.ProductRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ProductRepositoryTest {
 
     @Mock
     private ProductRepository productRepository;
 
-    @Before
-    public void setUp() {
-
-        ProductEntity product = new ProductEntity();
-        product.setId(1);
-        product.setName("Test Product");
-        product.setIsDeleted(false);
-
-
-        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(1))
-                .thenReturn(product);
-
-        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(2))
-                .thenReturn(null);
-    }
+    @InjectMocks
+    private ProductService productService;
 
     @Test
-    public void testFindProductEntitiesByIdAndIsDeletedFalse() {
+    public void testFindAllByIsDeletedFalse() {
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product());
+        Page<Product> productPage = new PageImpl<>(productList);
 
-        ProductEntity foundProduct = productRepository.findProductEntitiesByIdAndIsDeletedFalse(1);
-        assertNotNull(foundProduct);
-        assertEquals("Test Product", foundProduct.getName());
-        assertFalse(foundProduct.getIsDeleted());
+        when(productRepository.findAllByIsDeletedFalse(any(Pageable.class))).thenReturn(productPage);
 
-        ProductEntity notFoundProduct = productRepository.findProductEntitiesByIdAndIsDeletedFalse(2);
-        assertNull(notFoundProduct);
+
+        Page<Product> result = (Page<Product>) productService.list(0, 10);
+
+
+        assertEquals(productList.size(), result.getContent().size());
     }
+
+
+
+    @Test
+    public void testDeleteById() {
+        // Mocking the behavior of the repository method
+        int productId = 1;
+        when(productRepository.existsById(productId)).thenReturn(true);
+
+        // Calling the service method that uses the repository
+        productService.delete(productId);
+
+        // Verifying the interaction
+        verify(productRepository, times(1)).existsById(productId);
+        verify(productRepository, times(1)).deleteById(productId);
+    }
+
+
+
 }

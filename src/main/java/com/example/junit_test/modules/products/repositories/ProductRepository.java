@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
   @Transactional
   @Modifying
   @Query("UPDATE Product e SET e.isDeleted = true WHERE e.id IN :ids")
-  void deleteAllById(List<Integer> ids);
+  Void deleteAllById(List<Integer> ids);
 
   Integer countAllByIdIn(List<Integer> ids);
 }

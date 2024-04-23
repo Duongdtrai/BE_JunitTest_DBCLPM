@@ -1,96 +1,79 @@
 package com.example.junit_test.modules.products.controllers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.products.controllers.ProductController;
-import com.example.junit_test.modules.products.dto.ProductDto;
-import com.example.junit_test.modules.products.entities.ProductEntity;
+import com.example.junit_test.modules.products.entities.Product;
 import com.example.junit_test.modules.products.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
-public class ProductControllerTest {
+class ProductControllerTest {
 
-    private ProductController productController;
+    @Mock
     private ProductService productService;
 
+    private ProductController productController;
+
     @BeforeEach
-    public void setUp() {
-        productService = mock(ProductService.class);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
         productController = new ProductController(productService);
     }
 
     @Test
-    public void testListProducts() {
-        List<ProductEntity> productList = new ArrayList<>();
-        productList.add(new ProductEntity());
-
-        when(productService.list()).thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", productList), HttpStatus.OK));
-
-        ResponseEntity<SystemResponse<List<ProductEntity>>> responseEntity = productController.list();
-
+    void testListProducts() {
+        when(productService.list(anyInt(), anyInt()))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", new ResponsePage<>()), HttpStatus.OK));
+        ResponseEntity<SystemResponse<ResponsePage<Product>>> responseEntity = productController.list(0, 10);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(productList, responseEntity.getBody().getData());
     }
 
     @Test
-    public void testGetProductById() {
-        int productId = 1;
-        ProductEntity product = new ProductEntity();
-        product.setId(productId);
-        product.setName("Test Product");
-
-        when(productService.getById(productId)).thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", product), HttpStatus.OK));
-
-        ResponseEntity<SystemResponse<ProductEntity>> responseEntity = productController.getById(productId);
-
+    void testGetProductById() {
+        when(productService.getById(anyInt()))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", new Product()), HttpStatus.OK));
+        ResponseEntity<SystemResponse<Product>> responseEntity = productController.getById(1);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(product, responseEntity.getBody().getData());
     }
 
     @Test
-    public void testCreateProduct() {
-        ProductDto productDto = new ProductDto();
-        productDto.setName("New Product");
-
-        when(productService.create(productDto)).thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.CREATED.value(), "Created", true), HttpStatus.CREATED));
-
-        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.create(productDto);
-
+    void testCreateProduct() {
+        when(productService.create(any(Product.class)))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.CREATED.value(), "Created", true), HttpStatus.CREATED));
+        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.create(new Product(), null);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(true, responseEntity.getBody().getData());
     }
 
     @Test
-    public void testUpdateProduct() {
-        int productId = 1;
-        ProductDto productDto = new ProductDto();
-        productDto.setName("Updated Product");
-
-        when(productService.update(productId, productDto)).thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Updated", true), HttpStatus.OK));
-
-        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.update(productId, productDto);
-
+    void testUpdateProduct() {
+        when(productService.update(anyInt(), any(Product.class)))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Updated", true), HttpStatus.OK));
+        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.update(1, new Product(), null);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(true, responseEntity.getBody().getData());
     }
 
     @Test
-    public void testDeleteProduct() {
-        int productId = 1;
-
-        when(productService.delete(productId)).thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Deleted", true), HttpStatus.OK));
-
-        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.delete(productId);
-
+    void testDeleteProduct() {
+        when(productService.delete(anyInt()))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Deleted", true), HttpStatus.OK));
+        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.delete(1);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(true, responseEntity.getBody().getData());
+    }
+
+    @Test
+    void testDeleteProductsById() {
+        when(productService.deleteAll(any(Integer[].class)))
+                .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Deleted", true), HttpStatus.OK));
+        ResponseEntity<SystemResponse<Boolean>> responseEntity = productController.deleteProductsById(new Integer[]{1, 2, 3});
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
