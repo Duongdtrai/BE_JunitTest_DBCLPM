@@ -12,14 +12,14 @@ services:
       MYSQL_DATABASE: dbclpm
       MYSQL_USER: duongpt
       MYSQL_PASSWORD: 123456
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
 #    environment:
 #      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/dbclpm
 #      SPRING_DATASOURCE_USERNAME: duongpt
