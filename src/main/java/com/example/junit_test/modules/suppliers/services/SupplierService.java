@@ -64,7 +64,11 @@ public class SupplierService {
       }
 
       Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
-      if (supplierExist != null) {
+      if (supplierExist != null
+              && !existingSupplier.getName().equals(supplier.getName())
+              && !existingSupplier.getAddress().equals(supplier.getAddress())
+              && !existingSupplier.getPhoneNumber().equals(supplier.getPhoneNumber())
+      ) {
         return Response.badRequest(404, "Supplier is exist name");
       }
       supplier.setId(id);
