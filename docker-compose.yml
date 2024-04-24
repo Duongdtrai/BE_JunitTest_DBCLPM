@@ -20,9 +20,9 @@ services:
       - "8081:8081"
     depends_on:
       - db
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/dbclpm
-#      SPRING_DATASOURCE_USERNAME: duongpt
-#      SPRING_DATASOURCE_PASSWORD: 123456
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/dbclpm
+      SPRING_DATASOURCE_USERNAME: duongpt
+      SPRING_DATASOURCE_PASSWORD: 123456
 volumes:
   db_data:
