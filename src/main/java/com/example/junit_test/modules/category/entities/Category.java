@@ -25,7 +25,6 @@ public class Category extends BaseEntity {
 
   @NotEmpty
   @NotBlank
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String name;
 
   @Schema(hidden = true)
