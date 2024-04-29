@@ -3,7 +3,7 @@ package com.example.junit_test.modules.orders.services;
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.orders.ExcelHelper;
+//import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.entities.ImportOrderProduct;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
@@ -69,21 +69,29 @@ public class OrderService {
       if (!importOrderExist.isEmpty()) {
         return Response.badRequest(400, "Code đã tồn tại trong hệ thống");
       }
+      System.out.println(1);
       Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
       if (supplierExist == null) {
         return Response.badRequest(404, "Nhà cung cấp không tồn tại");
       }
+      System.out.println(2);
       Double payment = (double) 0;
       if (importOrder.getImportOrderProducts().isEmpty()) {
         return Response.badRequest(400, "Đơn hàng cần phải có sản phẩm");
       }
+      System.out.println(3);
       for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
         payment += value.getImportPrice() * value.getQuantity();
         value.setImportOrder(importOrder);
         Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
+        System.out.println(4);
         if (productExist == null) {
           return Response.badRequest(404, "Sản phẩm không tồn tại");
         }
+
+          System.out.println("productExist.getPrice(): " + productExist.getPrice());
+            System.out.println("value.getImportPrice(): " + value.getImportPrice());
+        System.out.println("productExist.getPrice() < value.getImportPrice(): " + (productExist.getPrice() < value.getImportPrice()));
         if (productExist.getPrice() < value.getImportPrice()) {
           return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");
         }
@@ -93,13 +101,11 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }
 
 
-  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> update(Integer id, @RequestBody ImportOrder importOrder) {
     try {
       ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndStatusIsFalse(id);
@@ -134,7 +140,6 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }
@@ -168,12 +173,12 @@ public class OrderService {
     }
   }
 
-  public void importFile(MultipartFile file) {
-    try {
-      List<Object> tutorials = ExcelHelper.excelToTutorials(file.getInputStream());
-      System.out.println("tutorials: " + tutorials);
-    } catch (IOException e) {
-      throw new RuntimeException("fail to store excel data: " + e.getMessage());
-    }
-  }
+//  public void importFile(MultipartFile file) {
+//    try {
+//      List<Object> tutorials = ExcelHelper.excelToTutorials(file.getInputStream());
+//      System.out.println("tutorials: " + tutorials);
+//    } catch (IOException e) {
+//      throw new RuntimeException("fail to store excel data: " + e.getMessage());
+//    }
+//  }
 }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="8" passed="6" failed="2" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2024-04-28T00:12:19 ICT" name="All Test Suite" finished-at="2024-04-28T00:12:20 ICT" duration-ms="670">
+    <groups>
+    </groups>
+    <test started-at="2024-04-28T00:12:19 ICT" name="/Users/bbadmin/Documents/BTL/BE_JunitTest_DBCLPM/src/test/java/com/example/junit_test/modules/orders" finished-at="2024-04-28T00:12:20 ICT" duration-ms="670">
+      <class name="com.example.junit_test.modules.orders.OrderRepositoryTest">
+        <test-method signature="testSaveOrder()[pri:0, instance:com.example.junit_test.modules.orders.OrderRepositoryTest@1bb5a082]" started-at="2024-04-28T00:12:20 ICT" name="testSaveOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="2" status="FAIL">
+          <exception class="java.lang.NullPointerException">
+            <message>
+              <![CDATA[Cannot invoke "com.example.junit_test.modules.orders.repositories.OrderRepository.save(Object)" because "this.orderRepository" is null]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.NullPointerException: Cannot invoke "com.example.junit_test.modules.orders.repositories.OrderRepository.save(Object)" because "this.orderRepository" is null
+at com.example.junit_test.modules.orders.OrderRepositoryTest.testSaveOrder(OrderRepositoryTest.java:24)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at com.intellij.rt.testng.IDEARemoteTestNG.run(IDEARemoteTestNG.java:65)
+at com.intellij.rt.testng.RemoteTestNGStarter.main(RemoteTestNGStarter.java:105)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.NullPointerException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testSaveOrder -->
+        <test-method signature="testFindOrderEntitiesById()[pri:0, instance:com.example.junit_test.modules.orders.OrderRepositoryTest@1bb5a082]" started-at="2024-04-28T00:12:20 ICT" name="testFindOrderEntitiesById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="0" status="FAIL">
+          <exception class="java.lang.NullPointerException">
+            <message>
+              <![CDATA[Cannot invoke "com.example.junit_test.modules.orders.repositories.OrderRepository.findOrderEntitiesById(java.lang.Integer)" because "this.orderRepository" is null]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.NullPointerException: Cannot invoke "com.example.junit_test.modules.orders.repositories.OrderRepository.findOrderEntitiesById(java.lang.Integer)" because "this.orderRepository" is null
+at com.example.junit_test.modules.orders.OrderRepositoryTest.testFindOrderEntitiesById(OrderRepositoryTest.java:30)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at com.intellij.rt.testng.IDEARemoteTestNG.run(IDEARemoteTestNG.java:65)
+at com.intellij.rt.testng.RemoteTestNGStarter.main(RemoteTestNGStarter.java:105)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.NullPointerException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testFindOrderEntitiesById -->
+      </class> <!-- com.example.junit_test.modules.orders.OrderRepositoryTest -->
+      <class name="com.example.junit_test.modules.orders.OrderControllerTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:19 ICT" name="setUp" finished-at="2024-04-28T00:12:20 ICT" duration-ms="562" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="save()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="save" finished-at="2024-04-28T00:12:20 ICT" duration-ms="3" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- save -->
+        <test-method signature="testListOrders()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testListOrders" finished-at="2024-04-28T00:12:20 ICT" duration-ms="59" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testListOrders -->
+        <test-method signature="testGetOrderById()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testGetOrderById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testGetOrderById -->
+        <test-method signature="testCreateOrder()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testCreateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testCreateOrder -->
+        <test-method signature="testUpdateOrder()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testUpdateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testUpdateOrder -->
+        <test-method signature="testDeleteOrdersById()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testDeleteOrdersById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testDeleteOrdersById -->
+      </class> <!-- com.example.junit_test.modules.orders.OrderControllerTest -->
+    </test> <!-- /Users/bbadmin/Documents/BTL/BE_JunitTest_DBCLPM/src/test/java/com/example/junit_test/modules/orders -->
+  </suite> <!-- All Test Suite -->
+</testng-results>

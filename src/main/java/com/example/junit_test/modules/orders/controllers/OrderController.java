@@ -4,7 +4,7 @@ package com.example.junit_test.modules.orders.controllers;
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-import com.example.junit_test.modules.orders.ExcelHelper;
+//import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.services.OrderService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -83,21 +83,21 @@ public class OrderController {
     return orderService.delete(orderId);
   }
 
-  @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @Hidden
-  public ResponseEntity<SystemResponse<String>> importFile(@RequestPart("file") MultipartFile file) {
-    String message = "";
-    if (ExcelHelper.hasExcelFormat(file)) {
-      try {
-        orderService.importFile(file);
-        message = "Uploaded the file successfully: " + file.getOriginalFilename();
-        return Response.badRequest(HttpStatus.OK.hashCode(), message);
-      } catch (Exception e) {
-        message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-        return Response.badRequest(HttpStatus.EXPECTATION_FAILED.hashCode(), message);
-      }
-    }
-    message = "Please upload an excel file!";
-    return Response.badRequest(HttpStatus.BAD_REQUEST.hashCode(), message);
-  }
+//  @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//  @Hidden
+//  public ResponseEntity<SystemResponse<String>> importFile(@RequestPart("file") MultipartFile file) {
+//    String message = "";
+//    if (ExcelHelper.hasExcelFormat(file)) {
+//      try {
+//        orderService.importFile(file);
+//        message = "Uploaded the file successfully: " + file.getOriginalFilename();
+//        return Response.badRequest(HttpStatus.OK.hashCode(), message);
+//      } catch (Exception e) {
+//        message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+//        return Response.badRequest(HttpStatus.EXPECTATION_FAILED.hashCode(), message);
+//      }
+//    }
+//    message = "Please upload an excel file!";
+//    return Response.badRequest(HttpStatus.BAD_REQUEST.hashCode(), message);
+//  }
 }
