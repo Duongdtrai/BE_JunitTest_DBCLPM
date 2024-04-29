@@ -370,4 +370,200 @@ public class OrderServiceTest {
         assertEquals("Nhà cung cấp không tồn tại", response.getBody().getMessage());
     }
 
+    @DisplayName("Update order with non-existing product")
+    @Test
+    public void updateOrderWithNonExistingProduct() {
+        ImportOrder importOrder = OrderMockData.invalidRecord_nonExistingProduct();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(null);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Sản phẩm không tồn tại", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order with import price greater than sale price")
+    @Test
+    public void updateOrderWithImportPriceGreaterThanSalePrice() {
+        ImportOrder importOrder = OrderMockData.validRecord();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(new Product());
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Giá nhập không được lớn hơn giá bán", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order with import price equal to 0")
+    @Test
+    public void updateOrderWithImportPriceEqualToZero() {
+        ImportOrder importOrder = OrderMockData.invalidRecord_importPriceEqualToZero();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(new Product());
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Giá nhập không được bằng 0", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order with quantity equal to 0")
+    @Test
+    public void updateOrderWithQuantityEqualToZero() {
+        ImportOrder importOrder = OrderMockData.invalidRecord_quantityEqualToZero();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        Product product = Product.builder().price(200L).build();
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(product);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Số lượng sản phẩm không được bằng 0", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order successfully")
+    @Test
+    public void updateOrderSuccessfully() {
+        ImportOrder importOrder = OrderMockData.validRecord();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        Product product = new Product();
+        product.setPrice(200.0);
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(product);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @DisplayName("Update order error due to exception")
+    @Test
+    public void updateOrderErrorDueToException() {
+        ImportOrder importOrder = OrderMockData.validRecord();
+        importOrder.setId(1);
+        ImportOrder importOrderExist = OrderMockData.validRecord();
+
+        Product product = new Product();
+        product.setPrice(200.0);
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
+        when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
+        when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt())).thenReturn(product);
+        doThrow(new RuntimeException("Unexpected error")).when(orderRepository).save(any());
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.update(1, importOrder);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Unexpected error", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order status with non-existing order")
+    @Test
+    public void updateStatusWithNonExistingOrder() {
+        Integer orderId = 1;
+        when(orderRepository.findOrderEntitiesById(orderId)).thenReturn(null);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.updateStatus(orderId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Đơn đặt hàng không tồn tại", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order status with order is paid")
+    @Test
+    public void updateStatusWithOrderIsPaid() {
+        Integer orderId = 1;
+        ImportOrder importOrder = new ImportOrder();
+        importOrder.setStatus(true);
+
+        when(orderRepository.findImportOrderByIdAndStatusIsFalse(orderId)).thenReturn(importOrder);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.updateStatus(orderId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Đơn hàng không được sửa đổi", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order status successfully")
+    @Test
+    public void updateStatusSuccessfully() {
+        Integer orderId = 1;
+        ImportOrder importOrder = new ImportOrder();
+        importOrder.setStatus(false);
+
+        when(orderRepository.findOrderEntitiesById(orderId)).thenReturn(importOrder);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.updateStatus(orderId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Cập nhật trạng thái thanh toán tiền thành công", response.getBody().getMessage());
+    }
+
+    @DisplayName("Update order status with exception")
+    @Test
+    public void updateStatusWithException() {
+        Integer orderId = 1;
+        when(orderRepository.findOrderEntitiesById(orderId)).thenThrow(new RuntimeException("Unexpected error"));
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.updateStatus(orderId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Unexpected error", response.getBody().getMessage());
+    }
+
+    @DisplayName("Delete order with non-existing order")
+    @Test
+    public void deleteOrderWithNonExistingOrder() {
+        Integer orderId = 1;
+        when(orderRepository.findOrderEntitiesById(orderId)).thenReturn(null);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.delete(orderId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Đơn đặt hàng không tồn tại", response.getBody().getMessage());
+    }
+
+    @DisplayName("Delete order successfully")
+    @Test
+    public void deleteOrderSuccessfully() {
+        Integer orderId = 1;
+        ImportOrder importOrder = new ImportOrder();
+
+        when(orderRepository.findOrderEntitiesById(orderId)).thenReturn(importOrder);
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.delete(orderId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @DisplayName("Delete order with exception")
+    @Test
+    public void deleteOrderWithException() {
+        Integer orderId = 1;
+        when(orderRepository.findOrderEntitiesById(orderId)).thenThrow(new RuntimeException("Unexpected error"));
+
+        ResponseEntity<SystemResponse<Boolean>> response = orderService.delete(orderId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Unexpected error", response.getBody().getMessage());
+    }
 }

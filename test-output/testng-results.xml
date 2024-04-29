@@ -86,36 +86,36 @@ at com.intellij.rt.testng.RemoteTestNGStarter.main(RemoteTestNGStarter.java:105)
           </reporter-output>
         </test-method> <!-- testFindOrderEntitiesById -->
       </class> <!-- com.example.junit_test.modules.orders.OrderRepositoryTest -->
-      <class name="com.example.junit_test.modules.orders.OrderControllerTest">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:19 ICT" name="setUp" finished-at="2024-04-28T00:12:20 ICT" duration-ms="562" status="PASS">
+      <class name="com.example.junit_test.modules.orders.controllers.OrderControllerTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:19 ICT" name="setUp" finished-at="2024-04-28T00:12:20 ICT" duration-ms="562" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="save()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="save" finished-at="2024-04-28T00:12:20 ICT" duration-ms="3" status="PASS">
+        <test-method signature="save()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="save" finished-at="2024-04-28T00:12:20 ICT" duration-ms="3" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- save -->
-        <test-method signature="testListOrders()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testListOrders" finished-at="2024-04-28T00:12:20 ICT" duration-ms="59" status="PASS">
+        <test-method signature="testListOrders()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testListOrders" finished-at="2024-04-28T00:12:20 ICT" duration-ms="59" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testListOrders -->
-        <test-method signature="testGetOrderById()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testGetOrderById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+        <test-method signature="testGetOrderById()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testGetOrderById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testGetOrderById -->
-        <test-method signature="testCreateOrder()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testCreateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="2" status="PASS">
+        <test-method signature="testCreateOrder()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testCreateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="2" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testCreateOrder -->
-        <test-method signature="testUpdateOrder()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testUpdateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+        <test-method signature="testUpdateOrder()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testUpdateOrder" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testUpdateOrder -->
-        <test-method signature="testDeleteOrdersById()[pri:0, instance:com.example.junit_test.modules.orders.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testDeleteOrdersById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
+        <test-method signature="testDeleteOrdersById()[pri:0, instance:com.example.junit_test.modules.orders.controllers.OrderControllerTest@71d44a3]" started-at="2024-04-28T00:12:20 ICT" name="testDeleteOrdersById" finished-at="2024-04-28T00:12:20 ICT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testDeleteOrdersById -->
-      </class> <!-- com.example.junit_test.modules.orders.OrderControllerTest -->
+      </class> <!-- com.example.junit_test.modules.orders.controllers.OrderControllerTest -->
     </test> <!-- /Users/bbadmin/Documents/BTL/BE_JunitTest_DBCLPM/src/test/java/com/example/junit_test/modules/orders -->
   </suite> <!-- All Test Suite -->
 </testng-results>

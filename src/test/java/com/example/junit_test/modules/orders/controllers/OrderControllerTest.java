@@ -1,9 +1,8 @@
-package com.example.junit_test.modules.orders;
+package com.example.junit_test.modules.orders.controllers;
 
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
 import com.example.junit_test.modules.OrderMockData;
-import com.example.junit_test.modules.orders.controllers.OrderController;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
 import com.example.junit_test.modules.orders.services.OrderService;

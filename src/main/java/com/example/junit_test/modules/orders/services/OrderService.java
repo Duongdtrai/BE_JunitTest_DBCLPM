@@ -69,29 +69,21 @@ public class OrderService {
       if (!importOrderExist.isEmpty()) {
         return Response.badRequest(400, "Code đã tồn tại trong hệ thống");
       }
-      System.out.println(1);
       Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
       if (supplierExist == null) {
         return Response.badRequest(404, "Nhà cung cấp không tồn tại");
       }
-      System.out.println(2);
       Double payment = (double) 0;
       if (importOrder.getImportOrderProducts().isEmpty()) {
         return Response.badRequest(400, "Đơn hàng cần phải có sản phẩm");
       }
-      System.out.println(3);
       for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
         payment += value.getImportPrice() * value.getQuantity();
         value.setImportOrder(importOrder);
         Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
-        System.out.println(4);
         if (productExist == null) {
           return Response.badRequest(404, "Sản phẩm không tồn tại");
         }
-
-          System.out.println("productExist.getPrice(): " + productExist.getPrice());
-            System.out.println("value.getImportPrice(): " + value.getImportPrice());
-        System.out.println("productExist.getPrice() < value.getImportPrice(): " + (productExist.getPrice() < value.getImportPrice()));
         if (productExist.getPrice() < value.getImportPrice()) {
           return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");
         }
