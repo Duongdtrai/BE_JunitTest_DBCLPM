@@ -39,10 +39,10 @@ class ProductControllerTest {
 
   @Test
   void testGetProductById() {
-    when(productService.getById(anyInt()))
+    when(productService.getById(100))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", new Product()), HttpStatus.OK));
-    ResponseEntity<SystemResponse<Product>> responseEntity = productController.getById(1);
-    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    ResponseEntity<SystemResponse<Product>> responseEntity = productController.getById(100);
+    assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
   }
 
   @Test

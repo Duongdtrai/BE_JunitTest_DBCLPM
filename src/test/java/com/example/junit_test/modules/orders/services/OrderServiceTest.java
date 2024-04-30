@@ -167,7 +167,7 @@ public class OrderServiceTest {
     @DisplayName("Create order with empty products")
     @Test
     public void createOrderWithoutProducts() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_missingImportOrderProduct();
+        ImportOrder importOrder = OrderMockData.invalidRecord_missingImportOrderProduct("TD123");
 
         when(orderRepository.findImportOrderByCode(importOrder.getCode())).thenReturn(new ArrayList<>());
         when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
@@ -182,7 +182,7 @@ public class OrderServiceTest {
     @DisplayName("Create order with non-existing product")
     @Test
     public void createOrderWithNonExistingProduct() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_nonExistingProduct();
+        ImportOrder importOrder = OrderMockData.invalidRecord_nonExistingProduct("TD123");
 
         when(orderRepository.findImportOrderByCode(importOrder.getCode())).thenReturn(new ArrayList<>());
         when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
@@ -212,7 +212,7 @@ public class OrderServiceTest {
     @DisplayName("Create order with import price equal to 0")
     @Test
     public void createOrderWithImportPriceEqualToZero() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_importPriceEqualToZero();
+        ImportOrder importOrder = OrderMockData.invalidRecord_importPriceEqualToZero("TD123");
 
         when(orderRepository.findImportOrderByCode(importOrder.getCode())).thenReturn(new ArrayList<>());
         when(supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId())).thenReturn(new Supplier());
@@ -227,7 +227,7 @@ public class OrderServiceTest {
     @DisplayName("Create order with quantity equal to 0")
     @Test
     public void createOrderWithQuantityEqualToZero() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_quantityEqualToZero();
+        ImportOrder importOrder = OrderMockData.invalidRecord_quantityEqualToZero("TD123");
 
         Product product = Product.builder().price(200L).build();
 
@@ -343,8 +343,8 @@ public class OrderServiceTest {
     @DisplayName("Update order with empty products")
     @Test
     public void updateOrderWithEmptyProducts() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_missingImportOrderProduct();
-        importOrder.setId(1);
+        ImportOrder importOrder = OrderMockData.invalidRecord_missingImportOrderProduct("MH004");
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
 
         when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
@@ -358,7 +358,7 @@ public class OrderServiceTest {
     @Test
     public void updateOrderWithNonExistingSupplier() {
         ImportOrder importOrder = OrderMockData.validRecord();
-        importOrder.setId(1);
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
         importOrderExist.setSupplierId(1);
 
@@ -373,8 +373,8 @@ public class OrderServiceTest {
     @DisplayName("Update order with non-existing product")
     @Test
     public void updateOrderWithNonExistingProduct() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_nonExistingProduct();
-        importOrder.setId(1);
+        ImportOrder importOrder = OrderMockData.invalidRecord_nonExistingProduct("MH004");
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
 
         when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
@@ -390,7 +390,7 @@ public class OrderServiceTest {
     @Test
     public void updateOrderWithImportPriceGreaterThanSalePrice() {
         ImportOrder importOrder = OrderMockData.validRecord();
-        importOrder.setId(1);
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
 
         when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
@@ -405,8 +405,8 @@ public class OrderServiceTest {
     @DisplayName("Update order with import price equal to 0")
     @Test
     public void updateOrderWithImportPriceEqualToZero() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_importPriceEqualToZero();
-        importOrder.setId(1);
+        ImportOrder importOrder = OrderMockData.invalidRecord_importPriceEqualToZero("MH004");
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
 
         when(orderRepository.findImportOrderByIdAndStatusIsFalse(1)).thenReturn(importOrderExist);
@@ -421,8 +421,8 @@ public class OrderServiceTest {
     @DisplayName("Update order with quantity equal to 0")
     @Test
     public void updateOrderWithQuantityEqualToZero() {
-        ImportOrder importOrder = OrderMockData.invalidRecord_quantityEqualToZero();
-        importOrder.setId(1);
+        ImportOrder importOrder = OrderMockData.invalidRecord_quantityEqualToZero("MH004");
+        importOrder.setId(32);
         ImportOrder importOrderExist = OrderMockData.validRecord();
 
         Product product = Product.builder().price(200L).build();
