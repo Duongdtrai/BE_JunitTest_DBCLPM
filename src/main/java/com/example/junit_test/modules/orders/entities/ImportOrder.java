@@ -5,7 +5,6 @@ import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.modules.suppliers.entities.Supplier;
 import com.example.junit_test.modules.user.entities.Employee;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -45,7 +44,7 @@ public class ImportOrder extends BaseEntity {
   @NotNull
   @Positive
   @Column(name = "supplier_id", insertable = false, updatable = false)
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Integer supplierId;
 
   @ManyToOne
@@ -65,7 +64,7 @@ public class ImportOrder extends BaseEntity {
   @NotNull
   @Positive
   @Column(name = "employee_id", insertable = false, updatable = false)
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Integer employeeId;
 
 

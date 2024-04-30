@@ -3,7 +3,6 @@ package com.example.junit_test.modules.orders.services;
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-//import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.entities.ImportOrderProduct;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
@@ -21,12 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -62,7 +58,7 @@ public class OrderService {
     }
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  //  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> create(@RequestBody ImportOrder importOrder) {
     try {
       List<ImportOrder> importOrderExist = orderRepository.findImportOrderByCode(importOrder.getCode());
@@ -93,11 +89,13 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
+//      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }
 
 
+  //  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> update(Integer id, @RequestBody ImportOrder importOrder) {
     try {
       ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndStatusIsFalse(id);
@@ -132,6 +130,7 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
+//      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }
