@@ -2,7 +2,6 @@ package com.example.junit_test.modules.orders.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
 import com.example.junit_test.modules.products.entities.Product;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +30,7 @@ public class ImportOrderProduct extends BaseEntity {
   @NotNull
   @Positive
   @Column(name = "product_id", insertable = false, updatable = false)
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Integer productId;
 
   @ManyToOne

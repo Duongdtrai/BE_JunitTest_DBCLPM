@@ -3,7 +3,6 @@ package com.example.junit_test.modules.orders.services;
 import com.example.junit_test.base.middleware.responses.Response;
 import com.example.junit_test.base.middleware.responses.ResponsePage;
 import com.example.junit_test.base.middleware.responses.SystemResponse;
-//import com.example.junit_test.modules.orders.ExcelHelper;
 import com.example.junit_test.modules.orders.entities.ImportOrder;
 import com.example.junit_test.modules.orders.entities.ImportOrderProduct;
 import com.example.junit_test.modules.orders.repositories.OrderRepository;
@@ -21,12 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -53,6 +49,7 @@ public class OrderService {
   public ResponseEntity<SystemResponse<ImportOrder>> getById(Integer orderId) {
     try {
       ImportOrder data = orderRepository.findOrderEntitiesById(orderId);
+      System.out.println("daataL  " + data);
       if (data == null) {
         return Response.badRequest(404, "Đơn đặt hàng không tồn tại");
       }
