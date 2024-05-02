@@ -59,7 +59,7 @@ public class OrderService {
     }
   }
 
-  @Transactional(rollbackFor = Exception.class)
+  //  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> create(@RequestBody ImportOrder importOrder) {
     try {
       List<ImportOrder> importOrderExist = orderRepository.findImportOrderByCode(importOrder.getCode());
@@ -90,11 +90,13 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
+//      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }
 
 
+  //  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> update(Integer id, @RequestBody ImportOrder importOrder) {
     try {
       ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndStatusIsFalse(id);
@@ -129,6 +131,7 @@ public class OrderService {
       orderRepository.save(importOrder);
       return Response.ok(true);
     } catch (Exception e) {
+//      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
       return Response.badRequest(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
   }

@@ -1,7 +1,6 @@
 package com.example.junit_test.modules.category.entities;
 
 import com.example.junit_test.base.entities.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +24,7 @@ public class Category extends BaseEntity {
 
   @NotEmpty
   @NotBlank
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String name;
 
   @Schema(hidden = true)
