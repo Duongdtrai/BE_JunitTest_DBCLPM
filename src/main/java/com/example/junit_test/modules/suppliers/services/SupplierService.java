@@ -60,7 +60,7 @@ public class SupplierService {
     try {
       Supplier existingSupplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
       if (existingSupplier == null) {
-        return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+        return Response.badRequest(404, "Supplier is not exist");
       }
 
       Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
@@ -83,7 +83,7 @@ public class SupplierService {
     try {
       Supplier supplier = supplierRepository.findSupplierByIdAndIsDeletedFalse(id);
       if (supplier == null) {
-        return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+        return Response.badRequest(404, "Supplier is not exist");
       }
       supplier.setIsDeleted(true);
       supplierRepository.save(supplier);

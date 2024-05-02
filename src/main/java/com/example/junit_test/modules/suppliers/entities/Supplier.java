@@ -25,22 +25,22 @@ public class Supplier extends BaseEntity {
 
   @Email
   @NotBlank(message = "Email is required")
-  @NotNull
+  @NotNull(message = "Email is required")
   private String email;
 
   @NotBlank(message = "Name is required")
   private String name;
 
-  @NotBlank
-  @NotEmpty
-  @NotNull
+  @NotBlank(message = "TaxCode is required")
+  @NotEmpty(message = "TaxCode is required")
+  @NotNull(message = "TaxCode is required")
   private String taxCode;
 
   @NotBlank(message = "Address is required")
   private String address;
 
-  @NotBlank(message = "Số điện thoại không được để trống")
-  @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Số điện thoại không hợp lệ")
+  @NotBlank(message = "PhoneNumber is required")
+  @Pattern(regexp = "^\\+?[0-9]{10}$", message = "Phone number format is not correct")
   private String phoneNumber;
 
   @Column(name = "note", columnDefinition = "TEXT", nullable = false)
