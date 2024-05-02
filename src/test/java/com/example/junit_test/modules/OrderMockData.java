@@ -22,7 +22,7 @@ public class OrderMockData {
   }
 
   public static ResponseEntity<SystemResponse<ImportOrder>> invalidResponseEntity() {
-    return ResponseEntity.ok(new SystemResponse<>(400, "Bad Request", invalidRecord_missingCode()));
+    return ResponseEntity.ok(new SystemResponse<>(400, "Bad Request", invalidRecord_missingData()));
   }
 
 
@@ -45,7 +45,14 @@ public class OrderMockData {
   }
 
   public static ImportOrder validRecord() {
-    ImportOrder importOrder = ImportOrder.builder().tax(10.0).code("TD633").status(false).note("Order").supplierId(2).employeeId(1).build();
+    ImportOrder importOrder = ImportOrder.builder()
+            .tax(10.0)
+            .code("TD123")
+            .status(false)
+            .note("Order")
+            .supplierId(2)
+            .employeeId(1)
+            .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
             ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(1).importOrder(importOrder).build(),
             ImportOrderProduct.builder().quantity(100).importPrice(90L).productId(2).importOrder(importOrder).build()
@@ -54,8 +61,9 @@ public class OrderMockData {
     return importOrder;
   }
 
-  public static ImportOrder invalidRecord_missingCode() {
+  public static ImportOrder inValidRecord_codeChanged() {
     return ImportOrder.builder()
+            .code("TD622")
             .tax(10.0)
             .supplierId(1)
             .employeeId(1)
@@ -63,76 +71,84 @@ public class OrderMockData {
             .build();
   }
 
-  public static ImportOrder invalidRecord_missingTax() {
+  public static ImportOrder inValidRecord_inValidCode() {
     return ImportOrder.builder()
-            .code("TD632")
-            .supplierId(1)
-            .employeeId(1)
-            .status(true)
-            .build();
-  }
-
-  public static ImportOrder invalidRecord_missingSupplierId() {
-    return ImportOrder.builder()
-            .code("TD632")
-            .tax(10.0)
-            .employeeId(1)
-            .status(true)
-            .build();
-  }
-
-  public static ImportOrder invalidRecord_missingEmployeeId() {
-    return ImportOrder.builder()
-            .code("TD632")
+            .code("TD6232")
             .tax(10.0)
             .supplierId(1)
-            .status(true)
+            .employeeId(1)
+            .status(false)
             .build();
   }
 
-
-  public static ImportOrder invalidRecord_invalidTax() {
+  public static ImportOrder invalidRecord_missingData() {
+    // missing code, tax, employeeId and supplierId
     return ImportOrder.builder()
-            .code("TD632")
+            .status(false)
+            .build();
+  }
+
+  public static ImportOrder invalidRecord_negativeData(String code) {
+    // tax, supplierId, employeeId are negative
+    return ImportOrder.builder()
+            .code(code)
             .tax(-10.0)
-            .supplierId(1)
-            .employeeId(1)
-            .status(true)
-            .build();
-  }
-
-  public static ImportOrder invalidRecord_invalidSupplierId() {
-    return ImportOrder.builder()
-            .code("TD632")
-            .tax(10.0)
             .supplierId(-1)
-            .employeeId(1)
-            .status(true)
+            .employeeId(-1)
+            .status(false)
             .build();
   }
 
-  public static ImportOrder invalidRecord_invalidEmployeeId() {
-    return ImportOrder.builder()
-            .code("TD632")
+  public static ImportOrder invalidRecord_nonExistSupplier(String code) {
+    ImportOrder importOrder = ImportOrder.builder()
+            .code(code)
+            .tax(10.0)
+            .supplierId(111)
+            .employeeId(1)
+            .status(false)
+            .build();
+    List<ImportOrderProduct> importOrderProducts = List.of(
+            ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(1).importOrder(importOrder).build()
+    );
+    importOrder.setImportOrderProducts(importOrderProducts);
+    return importOrder;
+  }
+
+  public static ImportOrder invalidRecord_nonExistEmployee(String code) {
+    ImportOrder importOrder = ImportOrder.builder()
+            .code(code)
             .tax(10.0)
             .supplierId(1)
-            .employeeId(-1)
-            .status(true)
+            .employeeId(100)
+            .status(false)
             .build();
+    List<ImportOrderProduct> importOrderProducts = List.of(
+            ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(1).importOrder(importOrder).build()
+    );
+    importOrder.setImportOrderProducts(importOrderProducts);
+    return importOrder;
   }
 
-  public static ImportOrder invalidRecord_missingImportOrderProduct() {
+  public static ImportOrder invalidRecord_missingImportOrderProduct(String code) {
     return ImportOrder.builder()
-            .code("TD632")
+            .code(code)
+            .tax(10.0)
             .supplierId(1)
             .employeeId(1)
-            .status(true)
+            .status(false)
             .importOrderProducts(new ArrayList<>())
             .build();
   }
 
-  public static ImportOrder invalidRecord_importPriceEqualToZero() {
-    ImportOrder importOrder = ImportOrder.builder().code("TD632").note("Order").status(true).supplierId(1).employeeId(1).build();
+  public static ImportOrder invalidRecord_importPriceEqualToZero(String code) {
+    ImportOrder importOrder = ImportOrder.builder()
+            .code(code)
+            .tax(10.0)
+            .note("Order")
+            .status(false)
+            .supplierId(1)
+            .employeeId(1)
+            .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
             ImportOrderProduct.builder().quantity(10).importPrice(0L).productId(1).importOrder(importOrder).build()
     );
@@ -140,18 +156,31 @@ public class OrderMockData {
     return importOrder;
   }
 
-  public static ImportOrder invalidRecord_quantityEqualToZero() {
-    ImportOrder importOrder = ImportOrder.builder().code("TD632").note("Order").supplierId(1).status(true).employeeId(1).build();
+  public static ImportOrder invalidRecord_quantityEqualToZero(String code) {
+    ImportOrder importOrder = ImportOrder.builder()
+            .code(code)
+            .tax(10.0)
+            .note("Order")
+            .supplierId(1)
+            .status(false)
+            .employeeId(1)
+            .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
-            ImportOrderProduct.builder().quantity(10).importPrice(10L).productId(2).importOrder(importOrder).build() // non-existing product
+            ImportOrderProduct.builder().quantity(0).importPrice(10L).productId(2).importOrder(importOrder).build()
     );
     importOrder.setImportOrderProducts(importOrderProducts);
     return importOrder;
   }
 
-
-  public static ImportOrder invalidRecord_nonExistingProduct() {
-    ImportOrder importOrder = ImportOrder.builder().code("TD632").note("Order").supplierId(1).employeeId(1).status(true).build();
+  public static ImportOrder invalidRecord_nonExistingProduct(String code) {
+    ImportOrder importOrder = ImportOrder.builder()
+            .code(code)
+            .tax(10.0)
+            .note("Order")
+            .supplierId(1)
+            .employeeId(1)
+            .status(false)
+            .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
             ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(9999).importOrder(importOrder).build(), // non-existing product
             ImportOrderProduct.builder().quantity(100).importPrice(90L).productId(2).importOrder(importOrder).build()
