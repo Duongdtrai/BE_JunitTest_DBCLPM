@@ -57,6 +57,30 @@ public class SupplierControllerTest {
             .andExpect(status().isOk());
   }
 
+  //    ==================== GET BY ID ====================
+  @Test
+  @DisplayName("Get an existing supplier by ID")
+  public void getExistingSupplierById() throws Exception {
+    mockMvc.perform(get("/api/v1/suppliers/11"))
+            .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Get a non-existing supplier by ID")
+  public void getNonExistingSupplierById() throws Exception {
+    mockMvc.perform(get("/api/v1/suppliers/999"))
+            .andExpect(status().isBadRequest())
+            .andExpect(result -> {
+              String responseMessage = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+              JSONObject jsonResponse = new JSONObject(responseMessage);
+              String message = jsonResponse.getString("message");
+              Integer status = Integer.valueOf(jsonResponse.getString("status"));
+              assertEquals(HttpStatus.BAD_REQUEST.value(), status);
+              assertEquals("Supplier is not exist", message);
+            });
+  }
+
+
   //    ==================== CREATE ====================
 
   @Test
@@ -241,7 +265,7 @@ public class SupplierControllerTest {
   @DisplayName("Create a new supplier with validation missing phone number")
   @Transactional
   public void createSupplierWithValidationEmailAndPhoneNumber() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_phoneNumberAndEmail()))
             )
@@ -275,7 +299,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation")
   @Transactional
   public void updateSupplierWithValidation() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.validSupplierUpdate()))
             )
@@ -310,7 +334,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation same email and address and phone number")
   @Transactional
   public void updateSupplierWithSameEmailAndAddressAndPhoneNumber() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.validSupplierSameNameAndAddressAndPhoneNumber()))
             )
@@ -334,7 +358,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing email")
   @Transactional
   public void updateSupplierWithValidationMissingEmail() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingEmail()))
             )
@@ -361,7 +385,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing name")
   @Transactional
   public void updateSupplierWithValidationMissingName() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingName()))
             )
@@ -387,7 +411,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing tax code")
   @Transactional
   public void updateSupplierWithValidationMissingTaxCode() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingTaxCode()))
             )
@@ -414,7 +438,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing address")
   @Transactional
   public void updateSupplierWithValidationMissingAddress() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingAddress()))
             )
@@ -439,7 +463,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing phone number")
   @Transactional
   public void updateSupplierWithValidationMissingPhoneNumber() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingPhoneNumber()))
             )
@@ -465,7 +489,7 @@ public class SupplierControllerTest {
 //  @DisplayName("Update a new supplier with validation missing note")
 //  @Transactional
 //  public void updateSupplierWithValidationMissingNote() throws Exception {
-//    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+//    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
 //                    .contentType(MediaType.APPLICATION_JSON)
 //                    .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_missingPhoneNumber()))
 //            )
@@ -477,7 +501,7 @@ public class SupplierControllerTest {
   @DisplayName("Update a new supplier with validation missing phone number")
   @Transactional
   public void updateSupplierWithValidationEmailAndPhoneNumber() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/1")
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/suppliers/11")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(SupplierMockData.invalidRecord_phoneNumberAndEmail()))
             )
@@ -511,7 +535,7 @@ public class SupplierControllerTest {
   @DisplayName("Delete a supplier with validation by id and status is false")
   @Transactional
   public void deleteSupplierById() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/suppliers/1"))
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/suppliers/11"))
             .andExpect(status().isOk())
             .andExpect(result -> {
               String responseMessage = result.getResponse().getContentAsString(StandardCharsets.UTF_8);

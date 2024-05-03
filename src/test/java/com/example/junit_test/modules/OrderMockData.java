@@ -27,14 +27,14 @@ public class OrderMockData {
 
 
   public static List<ImportOrder> validRecords() {
-    ImportOrder importOrder1 = ImportOrder.builder().code("TD632").status(false).tax(10.0).supplierId(1).employeeId(1).build();
+    ImportOrder importOrder1 = ImportOrder.builder().code("TD632").status(false).tax(10.0).supplierId(11).employeeId(1).build();
     List<ImportOrderProduct> importOrderProducts1 = List.of(
             ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(1).importOrder(importOrder1).build(),
             ImportOrderProduct.builder().quantity(100).importPrice(90L).productId(3).importOrder(importOrder1).build()
     );
     importOrder1.setImportOrderProducts(importOrderProducts1);
 
-    ImportOrder importOrder2 = ImportOrder.builder().code("TD633").tax(10.0).status(false).supplierId(2).employeeId(1).build();
+    ImportOrder importOrder2 = ImportOrder.builder().code("TD633").tax(10.0).status(false).supplierId(11).employeeId(1).build();
     List<ImportOrderProduct> importOrderProducts2 = List.of(
             ImportOrderProduct.builder().quantity(10).importPrice(100L).productId(2).importOrder(importOrder2).build(),
             ImportOrderProduct.builder().quantity(100).importPrice(90L).productId(1).importOrder(importOrder2).build()
@@ -50,7 +50,7 @@ public class OrderMockData {
             .code("TD123")
             .status(false)
             .note("Order")
-            .supplierId(2)
+            .supplierId(11)
             .employeeId(1)
             .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
@@ -65,7 +65,7 @@ public class OrderMockData {
     return ImportOrder.builder()
             .code("TD622")
             .tax(10.0)
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(1)
             .status(false)
             .build();
@@ -75,7 +75,7 @@ public class OrderMockData {
     return ImportOrder.builder()
             .code("TD6232")
             .tax(10.0)
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(1)
             .status(false)
             .build();
@@ -118,7 +118,7 @@ public class OrderMockData {
     ImportOrder importOrder = ImportOrder.builder()
             .code(code)
             .tax(10.0)
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(100)
             .status(false)
             .build();
@@ -133,7 +133,7 @@ public class OrderMockData {
     return ImportOrder.builder()
             .code(code)
             .tax(10.0)
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(1)
             .status(false)
             .importOrderProducts(new ArrayList<>())
@@ -146,7 +146,7 @@ public class OrderMockData {
             .tax(10.0)
             .note("Order")
             .status(false)
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(1)
             .build();
     List<ImportOrderProduct> importOrderProducts = List.of(
@@ -161,7 +161,7 @@ public class OrderMockData {
             .code(code)
             .tax(10.0)
             .note("Order")
-            .supplierId(1)
+            .supplierId(11)
             .status(false)
             .employeeId(1)
             .build();
@@ -177,7 +177,7 @@ public class OrderMockData {
             .code(code)
             .tax(10.0)
             .note("Order")
-            .supplierId(1)
+            .supplierId(11)
             .employeeId(1)
             .status(false)
             .build();

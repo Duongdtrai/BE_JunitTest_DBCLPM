@@ -45,7 +45,7 @@ public class SupplierService {
 
   public ResponseEntity<SystemResponse<Boolean>> create(Supplier supplier) {
     try {
-      Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
+      Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
       if (supplierExist == null) {
         supplierRepository.save(supplier);
         return Response.ok(true);
@@ -63,7 +63,7 @@ public class SupplierService {
         return Response.badRequest(404, "Supplier is not exist");
       }
 
-      Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
+      Supplier supplierExist = supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber());
       if (supplierExist != null
               && !existingSupplier.getName().equals(supplier.getName())
               && !existingSupplier.getAddress().equals(supplier.getAddress())

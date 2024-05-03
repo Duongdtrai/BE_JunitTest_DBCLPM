@@ -16,7 +16,7 @@ public class SupplierMockData {
   }
 
   public static Supplier validSupplier() {
-    return Supplier.builder().email("qnn@gmail.com").name("Nguyen Nhu Quynh").taxCode("NQ632").address("Ha Noi").phoneNumber("0192321312").note("Toi La Quynh Ne").build();
+    return Supplier.builder().email("ptd@gmail.com").name("Pham Tung Duong").taxCode("8123281221").address("Ha Noi").phoneNumber("0912791272").note("Toi La Duong Ne").build();
   }
 
   public static Supplier validSupplierSameNameAndAddressAndPhoneNumber() {

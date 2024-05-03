@@ -121,7 +121,7 @@ public class SupplierServiceTest {
   public void createNewSupplier() {
     Supplier supplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
 
-    when(supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenReturn(null);
+    when(supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenReturn(null);
     ResponseEntity<SystemResponse<Boolean>> response = supplierService.create(supplier);
 
     // Kiểm tra kết quả trả về
@@ -133,7 +133,7 @@ public class SupplierServiceTest {
   @DisplayName("Create supplier existing supplier")
   public void createExistingSupplier() {
     Supplier supplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
-    when(supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenReturn(supplier);
+    when(supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenReturn(supplier);
 
     ResponseEntity<SystemResponse<Boolean>> response = supplierService.create(supplier);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -147,7 +147,7 @@ public class SupplierServiceTest {
   public void createSupplierWithException() {
     Supplier supplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
 
-    when(supplierRepository.findByNameAndAddressAndPhoneNumber(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenThrow(new RuntimeException("Database error"));
+    when(supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(supplier.getName(), supplier.getAddress(), supplier.getPhoneNumber())).thenThrow(new RuntimeException("Database error"));
     ResponseEntity<SystemResponse<Boolean>> response = supplierService.create(supplier);
 
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
@@ -178,7 +178,7 @@ public class SupplierServiceTest {
     Supplier existingSupplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
     Supplier updatedSupplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
     when(supplierRepository.findSupplierByIdAndIsDeletedFalse(supplierId)).thenReturn(existingSupplier);
-    when(supplierRepository.findByNameAndAddressAndPhoneNumber(updatedSupplier.getName(), updatedSupplier.getAddress(), updatedSupplier.getPhoneNumber())).thenReturn(null);
+    when(supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(updatedSupplier.getName(), updatedSupplier.getAddress(), updatedSupplier.getPhoneNumber())).thenReturn(null);
     ResponseEntity<SystemResponse<Boolean>> response = supplierService.update(supplierId, updatedSupplier);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertTrue(response.getBody().getData());
@@ -191,7 +191,7 @@ public class SupplierServiceTest {
     Supplier existingSupplier = Supplier.builder().name("Duong").address("Thanh Hoa").phoneNumber("012399192").build();
     Supplier updatedSupplier = Supplier.builder().name("Duong1").address("Thanh Hoa2").phoneNumber("012399193").build();
     when(supplierRepository.findSupplierByIdAndIsDeletedFalse(supplierId)).thenReturn(existingSupplier);
-    when(supplierRepository.findByNameAndAddressAndPhoneNumber(updatedSupplier.getName(), updatedSupplier.getAddress(), updatedSupplier.getPhoneNumber())).thenReturn(updatedSupplier);
+    when(supplierRepository.findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(updatedSupplier.getName(), updatedSupplier.getAddress(), updatedSupplier.getPhoneNumber())).thenReturn(updatedSupplier);
     ResponseEntity<SystemResponse<Boolean>> response = supplierService.update(supplierId, updatedSupplier);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getStatus());

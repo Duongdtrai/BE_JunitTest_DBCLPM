@@ -38,7 +38,7 @@ public class OrderService {
     try {
       ImportOrder data = orderRepository.findOrderEntitiesById(orderId);
       if (data == null) {
-        return Response.badRequest(404, "Đơn đặt hàng không tồn tại");
+        return Response.badRequest(400, "Đơn đặt hàng không tồn tại");
       }
       return Response.ok(data);
     } catch (Exception e) {
@@ -58,8 +58,6 @@ public class OrderService {
   }
 
 
-
-
   //  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<SystemResponse<Boolean>> create(@RequestBody ImportOrder importOrder) {
     try {
@@ -69,7 +67,7 @@ public class OrderService {
       }
       Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
       if (supplierExist == null) {
-        return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+        return Response.badRequest(400, "Nhà cung cấp không tồn tại");
       }
       Double payment = (double) 0;
       if (importOrder.getImportOrderProducts().isEmpty()) {
@@ -80,7 +78,7 @@ public class OrderService {
         value.setImportOrder(importOrder);
         Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
         if (productExist == null) {
-          return Response.badRequest(404, "Sản phẩm không tồn tại");
+          return Response.badRequest(400, "Sản phẩm không tồn tại");
         }
         if (productExist.getPrice() < value.getImportPrice()) {
           return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");
@@ -102,7 +100,7 @@ public class OrderService {
     try {
       ImportOrder importOrderExist = orderRepository.findImportOrderByIdAndStatusIsFalse(id);
       if (importOrderExist == null) {
-        return Response.badRequest(404, "Đơn hàng không được sửa đổi");
+        return Response.badRequest(400, "Đơn hàng không được sửa đổi");
       }
       if (!importOrderExist.getCode().equalsIgnoreCase(importOrder.getCode())) {
         return Response.badRequest(400, "Đơn hàng không được thay đổi mã sản phẩm");
@@ -112,7 +110,7 @@ public class OrderService {
       }
       Supplier supplierExist = this.supplierRepository.findSupplierByIdAndIsDeletedFalse(importOrder.getSupplierId());
       if (supplierExist == null) {
-        return Response.badRequest(404, "Nhà cung cấp không tồn tại");
+        return Response.badRequest(400, "Nhà cung cấp không tồn tại");
       }
       Double payment = (double) 0;
       for (ImportOrderProduct value : importOrder.getImportOrderProducts()) {
@@ -120,7 +118,7 @@ public class OrderService {
         value.setImportOrder(importOrder);
         Product productExist = this.productRepository.findProductEntitiesByIdAndIsDeletedFalse(value.getProductId());
         if (productExist == null) {
-          return Response.badRequest(404, "Sản phẩm không tồn tại");
+          return Response.badRequest(400, "Sản phẩm không tồn tại");
         }
         if (productExist.getPrice() < value.getImportPrice()) {
           return Response.badRequest(400, "Giá nhập không được lớn hơn giá bán");

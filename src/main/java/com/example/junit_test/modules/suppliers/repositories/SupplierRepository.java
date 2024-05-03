@@ -18,7 +18,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
 
   Supplier findSupplierByIdAndIsDeletedFalse(Integer id);
 
-  Supplier findByNameAndAddressAndPhoneNumber(String name, @NotBlank(message = "Address is required") String address, @NotBlank(message = "Phone number is required") String phoneNumber);
+  Supplier findByNameAndAddressAndPhoneNumberAndIsDeletedFalse(String name, @NotBlank(message = "Address is required") String address, @NotBlank(message = "Phone number is required") String phoneNumber);
 
   @Transactional
   @Modifying
