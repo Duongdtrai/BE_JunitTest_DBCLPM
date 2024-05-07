@@ -1,17 +1,17 @@
-version: '3'
+version: "3"
 services:
-  db:
-    image: mysql:latest
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-      - .:/test-app
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: dbclpm
-      MYSQL_USER: duongpt
-      MYSQL_PASSWORD: 123456
+  # db:
+  #   image: mysql:latest
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+  #     - .:/test-app
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456
+  #     MYSQL_DATABASE: dbclpm
+  #     MYSQL_USER: duongpt
+  #     MYSQL_PASSWORD: 123456
   app:
     build:
       context: .
@@ -22,7 +22,7 @@ services:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/dbclpm
-      SPRING_DATASOURCE_USERNAME: duongpt
-      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
 volumes:
   db_data:
