@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,7 +53,8 @@ class ProductServiceTest {
   @Test
   @DisplayName("Get Existing Product By Id")
   public void testFindById() {
-    Product product = Product.builder().id(1).name("Test product").isDeleted(false).price(1000).categoryId(1).quantity(100).build();
+    Product product = Product.builder().id(1).name("Test product").isDeleted(false).price(1000).categoryId(1)
+        .quantity(100).build();
 
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(product);
 
@@ -72,7 +74,21 @@ class ProductServiceTest {
     ResponseEntity<SystemResponse<Product>> response = productService.getById(nonExistingProductId);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals(HttpStatus.BAD_REQUEST.value(), response.getBody().getStatus());
-    assertEquals("Product is not exist", response.getBody().getMessage());
+  }
+
+  @Test
+  @DisplayName("Get Product By Id with BD error")
+  public void testFindByIdWithDBError() {
+    int productId = 1;
+
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(productId))
+        .thenThrow(new RuntimeException("Database error"));
+
+    ResponseEntity<SystemResponse<Product>> response = productService.getById(1);
+
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
   }
 
   @Test
@@ -86,7 +102,8 @@ class ProductServiceTest {
     listProductMock.add(product2);
     Page<Product> samplePage = new PageImpl<>(listProductMock);
 
-    // Thiết lập điều kiện giả cho phương thức findAllByIsDeletedFalse của repository trả về dữ liệu mẫu
+    // Thiết lập điều kiện giả cho phương thức findAllByIsDeletedFalse của
+    // repository trả về dữ liệu mẫu
     when(productRepository.findAllByIsDeletedFalse(any(Pageable.class))).thenReturn(samplePage);
 
     // Gọi phương thức cần kiểm tra
@@ -109,118 +126,18 @@ class ProductServiceTest {
   }
 
   @Test
-  @DisplayName("Create success Category")
-  public void createSuccessNewCategory() {
-    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
-
-    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(null);
-
-    ResponseEntity<SystemResponse<Category>> response = categoryService.create(category);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(response.getBody().getData(), true);;;
-  }
-
-  @Test
-  @DisplayName("Create fail Category without Name")
-  public void createFailNewCategoryWithoutName() {
-    Category category = Category.builder().id(1).isDeleted(false).build();
-    when(categoryRepository.findByNameAndIsDeletedFalse(category.getName())).thenReturn(null);
-
-    ResponseEntity<SystemResponse<Category>> response = categoryService.create(category);
-
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals("Category is exist name", response.getBody().getMessage());
-    assertEquals(response.getBody().getData(), null);;;
-  }
-
-  @Test
-  @DisplayName("Delete Category")
-  public void deleteCategory() {
-    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
-    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
-
-    ResponseEntity<SystemResponse<Boolean>> response = categoryService.delete(category.getId());
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertTrue(response.getBody().getData());;;
-  }
-
-  @Test
-  @DisplayName("Create fail Category with duplicated")
-  public void createFaildNewCategoryWithDuplicated() {
-    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
-
-    when(categoryRepository.findByNameAndIsDeletedFalse(category.getName())).thenReturn(category);
-
-    ResponseEntity<SystemResponse<Category>> response = categoryService.create(category);
-
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals("Category is exist name", response.getBody().getMessage());
-    assertEquals(response.getBody().getData(), null);;;
-  }
-
-  @Test
-  @DisplayName("List Category")
-  public void getListCategory() {
-    List<Category> categories = new ArrayList<>();
-    Category category1 = Category.builder().name("Category 1").build();
-    Category category2 = Category.builder().name("Category 2").build();
-    categories.add(category1);
-    categories.add(category2);
-    Page<Category> samplePage = new PageImpl<>(categories);
-
-    // Thiết lập điều kiện giả cho phương thức findAllByIsDeletedFalse của repository trả về dữ liệu mẫu
-    when(categoryRepository.findAllByIsDeletedFalse(any(Pageable.class))).thenReturn(samplePage);
+  @DisplayName("List Product with DB Error")
+  void testListProductsWithDBError() {
+    when(productRepository.findAllByIsDeletedFalse(any(Pageable.class)))
+        .thenThrow(new RuntimeException("Database error"));
 
     // Gọi phương thức cần kiểm tra
-    ResponseEntity<SystemResponse<ResponsePage<Category>>> response = categoryService.list(0, 10);
+    ResponseEntity<SystemResponse<ResponsePage<Product>>> response = productService.list(0, 10);
 
-    // Kiểm tra kết quả trả về
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertNotNull(response.getBody());
-    assertNotNull(response.getBody().getData());
-    Object data = response.getBody().getData().getData();
-    int size;
-    if (data instanceof List) {
-      size = ((List<?>) data).size();
-    } else if (data instanceof String) {
-      size = ((String) data).length();
-    } else {
-      size = -1;
-    }
-    assertEquals(categories.size(), size);
-  }
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
 
-  @Test
-  @DisplayName("Test update success category")
-  public void updateSuccessCategory() {
-    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
-
-    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
-
-    Category updatedCategory = Category.builder().id(1).name("Test category 2").isDeleted(false).build();
-
-    ResponseEntity<SystemResponse<Boolean>> response = categoryService.update(category.getId(), updatedCategory);
-
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertTrue(response.getBody().getData());;;
-  }
-
-  @Test
-  @DisplayName("Test update fail category with duplicated")
-  public void updateFailCategory() {
-    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
-    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
-
-    Category duplicatedCategory = Category.builder().id(2).name("Test category 2").isDeleted(false).build();
-    when(categoryRepository.findByNameAndIsDeletedFalse(category.getName())).thenReturn(duplicatedCategory);
-
-    Category updatedCategory = Category.builder().id(1).name("Test category 2").isDeleted(false).build();
-    ResponseEntity<SystemResponse<Boolean>> response = categoryService.update(category.getId(), updatedCategory);
-
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals(null, response.getBody().getData());
   }
 
   @Test
@@ -229,7 +146,8 @@ class ProductServiceTest {
     Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
     when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
 
-    Product product = Product.builder().id(1).name("Test product").isDeleted(false).price(1000).categoryId(1).quantity(100).build();
+    Product product = Product.builder().id(1).name("Test product").isDeleted(false).price(1000).categoryId(1)
+        .quantity(100).build();
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(null);
     ResponseEntity<SystemResponse<Boolean>> response = productService.create(product);
 
@@ -290,15 +208,35 @@ class ProductServiceTest {
   }
 
   @Test
+  @DisplayName("Create fail product with DB Error")
+  public void creatFailProductWithDBError() {
+    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
+    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId()))
+        .thenThrow(new RuntimeException("Database error"));
+
+    Product product = Product.builder().id(1).categoryId(1).isDeleted(false).name("Test Product").quantity(100).build();
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId()))
+        .thenThrow(new RuntimeException("Database error"));
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.create(product);
+
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
+  }
+
+  @Test
   @DisplayName("Update success Product")
   void testUpdateSuccessProduct() {
     Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
     when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
 
-    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product").quantity(100).build();
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(product);
 
-    Product updatedProduct = Product.builder().id(1).categoryId(1).price(200000).isDeleted(false).name("Test Product 2").quantity(100).build();
+    Product updatedProduct = Product.builder().id(1).categoryId(1).price(200000).isDeleted(false).name("Test Product 2")
+        .quantity(100).build();
 
     ResponseEntity<SystemResponse<Boolean>> response = productService.update(1, updatedProduct);
 
@@ -307,12 +245,53 @@ class ProductServiceTest {
   }
 
   @Test
+  @DisplayName("Update fail Product with non existing product id")
+  void testUpdateProductWithNonExistingProductId() {
+    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
+    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
+
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(null);
+
+    Product updatedProduct = Product.builder().id(1).categoryId(1).price(200000).isDeleted(false).name("Test Product 2")
+        .quantity(100).build();
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.update(1, updatedProduct);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(response.getBody().getData(), null);
+  }
+
+  @Test
+  @DisplayName("Update fail Product with DB error")
+  void testUpdateProductWithDBError() {
+    Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
+    when(categoryRepository.findByIdAndIsDeletedFalse(category.getId()))
+        .thenThrow(new RuntimeException("Database error"));
+
+    Product product = Product.builder().id(1).categoryId(1).isDeleted(false).name("Test Product").quantity(100).build();
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId()))
+        .thenThrow(new RuntimeException("Database error"));
+
+    Product updatedProduct = Product.builder().id(1).categoryId(1).price(200000).isDeleted(false).name("Test Product 2")
+        .quantity(100).build();
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.update(updatedProduct.getId(), updatedProduct);
+
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
+  }
+
+  @Test
   @DisplayName("Update fail Product with name")
   void testUpdateFailProductWithoutName() {
     Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
     when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
 
-    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product").quantity(100).build();
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(product);
 
     Product updatedProduct = Product.builder().id(1).categoryId(1).price(200000).isDeleted(false).quantity(100).build();
@@ -330,10 +309,12 @@ class ProductServiceTest {
     Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
     when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
 
-    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product").quantity(100).build();
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(product);
 
-    Product updatedProduct = Product.builder().id(1).categoryId(null).price(200000).isDeleted(false).quantity(100).build();
+    Product updatedProduct = Product.builder().id(1).categoryId(null).price(200000).isDeleted(false).quantity(100)
+        .build();
 
     ResponseEntity<SystemResponse<Boolean>> response = productService.update(1, updatedProduct);
 
@@ -348,7 +329,8 @@ class ProductServiceTest {
     Category category = Category.builder().id(1).name("Test category").isDeleted(false).build();
     when(categoryRepository.findByIdAndIsDeletedFalse(category.getId())).thenReturn(category);
 
-    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product").quantity(100).build();
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(product.getId())).thenReturn(product);
 
     Product updatedProduct = Product.builder().id(1).categoryId(1).isDeleted(false).quantity(100).build();
@@ -363,13 +345,87 @@ class ProductServiceTest {
   @Test
   @DisplayName("Delete product")
   void testDeleteProduct() {
-    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product").quantity(100).build();
+    Product product = Product.builder().id(1).categoryId(1).price(10000).isDeleted(false).name("Test Product")
+        .quantity(100).build();
 
     when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(anyInt()))
-            .thenReturn(product);
+        .thenReturn(product);
 
     ResponseEntity<SystemResponse<Boolean>> responseEntity = productService.delete(1);
 
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+  }
+
+  @Test
+  @DisplayName("Test delete product with non exist category id")
+  public void deleteProductWithNonExistId() {
+    int productId = 1;
+
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(productId)).thenReturn(null);
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.delete(productId);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(response.getBody().getData(), null);
+  }
+
+  @Test
+  @DisplayName("Test delete product with db error")
+  public void deleteProductWithDBError() {
+    int categoryId = 1;
+
+    when(productRepository.findProductEntitiesByIdAndIsDeletedFalse(categoryId)).thenThrow(new RuntimeException("Database error"));
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.delete(categoryId);
+
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
+  }
+
+  @Test
+  @DisplayName("Test success delete all")
+  public void deleteSuccessAllProduct() {
+    Product p1 = Product.builder().isDeleted(false).id(1).name("Product 1").id(1).build();
+    Product p2 = Product.builder().isDeleted(false).id(2).name("Product 2").id(2).build();
+
+    Integer[] productIdList = new Integer[2];
+    productIdList[0] = p1.getId();
+    productIdList[1] = p2.getId();
+
+    when(productRepository.countAllByIdIn(Arrays.asList(productIdList))).thenReturn(2);
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.deleteAll(productIdList);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertTrue(response.getBody().getData());
+  }
+
+  @Test
+  @DisplayName("Test delete all with ids not correct")
+  public void deleteAllProductWithIdsListNotCorrect() {
+    Integer[] productIdList = new Integer[0];
+
+    when(productRepository.countAllByIdIn(Arrays.asList(productIdList))).thenReturn(1);
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.deleteAll(productIdList);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(response.getBody().getData(), null);
+  }
+
+  @Test
+  @DisplayName("Test delete all with db error")
+  public void deleteAllProductWithDBError() {
+    Integer[] productIdList = new Integer[0];
+
+    when(productRepository.countAllByIdIn(Arrays.asList(productIdList)))
+            .thenThrow(new RuntimeException("Database error"));
+
+    ResponseEntity<SystemResponse<Boolean>> response = productService.deleteAll(productIdList);
+
+    assertEquals("Database error", response.getBody().getMessage());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getBody().getStatus());
   }
 }

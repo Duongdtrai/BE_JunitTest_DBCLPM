@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +31,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testListProducts() {
     when(productService.list(anyInt(), anyInt()))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", new ResponsePage<>()), HttpStatus.OK));
@@ -38,6 +40,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testGetProductById() {
     when(productService.getById(100))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Success", new Product()), HttpStatus.OK));
@@ -46,6 +49,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testCreateProduct() {
     when(productService.create(any(Product.class)))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.CREATED.value(), "Created", true), HttpStatus.CREATED));
@@ -54,6 +58,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testUpdateProduct() {
     when(productService.update(anyInt(), any(Product.class)))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Updated", true), HttpStatus.OK));
@@ -62,6 +67,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testDeleteProduct() {
     when(productService.delete(anyInt()))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Deleted", true), HttpStatus.OK));
@@ -70,6 +76,7 @@ class ProductControllerTest {
   }
 
   @Test
+  @Transactional
   void testDeleteProductsById() {
     when(productService.deleteAll(any(Integer[].class)))
             .thenReturn(new ResponseEntity<>(new SystemResponse<>(HttpStatus.OK.value(), "Deleted", true), HttpStatus.OK));
